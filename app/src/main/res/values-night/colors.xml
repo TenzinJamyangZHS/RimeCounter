@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_default">#CCFFEE58</color>
+
+    <color name="color_root">#212121</color>
+    <color name="color_layer1">#263238</color>
+    <color name="color_layer2">#37474F</color>
+
+    <color name="color_list_button">#CC455A64</color>
+    <color name="color_add_button">@color/color_yellow</color>
+
+    <color name="item_list_alt">#8037474F</color>
+
+    <color name="color_add_button_bg">#E637474F</color>
+</resources>

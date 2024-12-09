@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="settingsViewModel"
+            type="com.rimetech.rimecounter.viewmodels.SettingsViewModel" />
+    </data>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tab_icon_image"
+        android:background="@color/color_transparent"
+        android:padding="10dp"
+        tools:ignore="ContentDescription">
+
+    </ImageView>
+</layout>

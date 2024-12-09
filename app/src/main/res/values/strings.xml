@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Rime Counter</string>
+    <string name="settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="tab_range">Tab Range</string>
+    <string name="tab_style">Tab Style</string>
+    <string name="round">Round</string>
+    <string name="outline_round">Outline Round</string>
+    <string name="sharp">Sharp</string>
+    <string name="outline">Outline</string>
+    <string name="tab_color">Tab Color</string>
+    <string name="themes">Themes</string>
+    <string name="follow_system">Follow System</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="extra_themes">Extra Themes</string>
+    <string name="monet">Monet</string>
+    <string name="blur">Blur</string>
+    <string name="counter_background">Counter Background</string>
+    <string name="normal">Normal</string>
+    <string name="from_counter">From Counter</string>
+    <string name="amoled_black">Amoled Black</string>
+    <string name="counter_shape">Counter Shape</string>
+    <string name="round_rectangle">Round Rectangle</string>
+    <string name="null_shape">Null Shape</string>
+    <string name="monet_need_android_12">Monet need Android 12+</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="color_red">#D32F2F</color>
+    <color name="color_pink">#C2185B</color>
+    <color name="color_purple">#7B1FA2</color>
+    <color name="color_indigo">#303F9F</color>
+    <color name="color_blue">#1976D2</color>
+    <color name="color_green">#388E3C</color>
+    <color name="color_yellow">#FBC02D</color>
+    <color name="color_orange">#F57C00</color>
+    <color name="color_brown">#5D4037</color>
+    <color name="color_teal">#00796B</color>
+
+    <color name="color_transparent">#00FFFFFF</color>
+    <color name="color_default">#805E35B1</color>
+
+    <color name="color_root">#FAFAFA</color>
+    <color name="color_layer1">#FAFAFA</color>
+    <color name="color_layer2">#FAFAFA</color>
+
+    <color name="color_list_button">#CCFAFAFA</color>
+
+    <color name="color_add_button_bg">#E6FAFAFA</color>
+    <color name="color_add_button_bg_clicked">#E6388E3C</color>
+    <color name="color_add_button">@color/color_blue</color>
+
+    <color name="item_list_alt">#80FAFAFA</color>
+    <color name="amoled_font">#80FAFAFA</color>
+    <color name="amoled_disabled">#80646464</color>
+
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="grey_600">#757575</color>
+    <color name="color_amber">#FFA000</color>
+    <color name="color_light_blue">#0288D1</color>
+
+
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_root_monet">@android:color/system_accent1_50</color>
+    <color name="color_layer1_monet">@android:color/system_accent1_100</color>
+    <color name="color_layer2_monet">@android:color/system_accent1_200</color>
+    <color name="color_add_button_monet">@android:color/system_accent1_600</color>
+</resources>

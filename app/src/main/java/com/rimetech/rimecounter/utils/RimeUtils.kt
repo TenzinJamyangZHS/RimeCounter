@@ -1,0 +1,312 @@
+@file:Suppress("DEPRECATION")
+
+package com.rimetech.rimecounter.utils
+
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Build
+import android.os.SystemClock
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewOutlineProvider
+import android.view.animation.AnticipateInterpolator
+import android.view.animation.OvershootInterpolator
+import android.widget.ImageView
+import android.widget.RadioButton
+import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
+import com.google.android.material.tabs.TabLayout
+import com.rimetech.rimecounter.R
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
+
+const val HOME = "Home"
+const val SEARCH = "Search"
+const val FAVOR = "Favor"
+const val HISTORY = "History"
+const val SETTINGS = "Settings"
+const val ARCHIVE = "Archive"
+const val LOCK = "Lock"
+
+const val ICON_ROUND = "icon-round"
+const val ICON_SHARP = "icon-sharp"
+const val ICON_OUTLINE = "icon-outline"
+const val ICON_OUTLINE_ROUND = "icon-outline-round"
+
+const val COLOR_DEFAULT = "color-default"
+const val COLOR_RED = "color-red"
+const val COLOR_PINK = "color-pink"
+const val COLOR_PURPLE = "color-purple"
+const val COLOR_INDIGO = "color-indigo"
+const val COLOR_BLUE = "color-blue"
+const val COLOR_GREEN = "color-green"
+const val COLOR_YELLOW = "color-yellow"
+const val COLOR_ORANGE = "color-orange"
+const val COLOR_BROWN = "color-brown"
+const val COLOR_TEAL = "color-teal"
+
+const val THEME_SYSTEM = "theme-system"
+const val THEME_LIGHT = "theme-light"
+const val THEME_DARK = "theme-dark"
+
+const val BG_NORMAL = "bg-normal"
+const val BG_FROM_COUNTER = "bg-from-counter"
+const val BG_AMOLED = "bg-amoled"
+
+const val SHAPE_ROUND = "shape-round"
+const val SHAPE_RECTANGLE = "shape-rectangle"
+const val SHAPE_NULL = "shape-null"
+
+const val POS_LEFT = 0
+const val POS_TOP = 1
+const val POS_RIGHT = 2
+const val POS_BOTTOM = 3
+const val POS_VER = 4
+const val POS_HOR = 5
+const val POS_ALL = 6
+const val TOWARD_LEFT = 0
+const val TOWARD_RIGHT = 1
+const val TOWARD_UP = 2
+const val TOWARD_DOWN = 3
+const val HOME_LIST=0
+const val LIKED_LIST=1
+const val ARCHIVED_LIST=2
+const val LOCKED_LIST=3
+
+
+val tabNameList = mutableListOf(HOME, SEARCH, FAVOR, HISTORY, SETTINGS, ARCHIVE, LOCK)
+
+val tabIconRoundList = mutableListOf(
+    HOME to R.drawable.round_home_48,
+    SEARCH to R.drawable.round_search_48,
+    FAVOR to R.drawable.round_favorite_48,
+    HISTORY to R.drawable.round_history_48,
+    SETTINGS to R.drawable.round_settings_48,
+    ARCHIVE to R.drawable.round_archive_48,
+    LOCK to R.drawable.round_lock_48
+)
+
+val tabIconSharpList = mutableListOf(
+    HOME to R.drawable.sharp_home_48,
+    SEARCH to R.drawable.sharp_search_48,
+    FAVOR to R.drawable.sharp_favorite_48,
+    HISTORY to R.drawable.sharp_history_48,
+    SETTINGS to R.drawable.sharp_settings_48,
+    ARCHIVE to R.drawable.sharp_archive_48,
+    LOCK to R.drawable.sharp_lock_48
+)
+
+val tabIconOutLineList = mutableListOf(
+    HOME to R.drawable.outline_home_48,
+    SEARCH to R.drawable.sharp_search_48,
+    FAVOR to R.drawable.outline_favorite_48,
+    HISTORY to R.drawable.sharp_history_48,
+    SETTINGS to R.drawable.outline_settings_48,
+    ARCHIVE to R.drawable.outline_archive_48,
+    LOCK to R.drawable.outline_lock_48
+)
+
+val tabIconOutlineRoundList = mutableListOf(
+    HOME to R.drawable.outline_rounded_home_48,
+    SEARCH to R.drawable.round_search_48,
+    FAVOR to R.drawable.outline_round_favorite_48,
+    HISTORY to R.drawable.outline_rounded_history_48,
+    SETTINGS to R.drawable.outline_rounded_settings_48,
+    ARCHIVE to R.drawable.outline_rounded_archive_48,
+    LOCK to R.drawable.outline_rounded_lock_48
+)
+
+fun Context.dpToPx(dp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, this.resources.displayMetrics)
+}
+
+@SuppressLint("DiscouragedApi", "InternalInsetResource")
+fun getNavigationBarHeight(context: Context): Int {
+    val navigationBarHeightResId =
+        context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (navigationBarHeightResId > 0) {
+        context.resources.getDimensionPixelSize(navigationBarHeightResId)
+    } else {
+        0
+    }
+}
+
+@SuppressLint("DiscouragedApi", "InternalInsetResource")
+fun getStatusBarHeight(context: Context): Int {
+    val statusBarHeightResId =
+        context.resources.getIdentifier("status_bar_height", "dimen", "android")
+    return if (statusBarHeightResId > 0) {
+        context.resources.getDimensionPixelSize(statusBarHeightResId)
+    } else {
+        0
+    }
+}
+
+fun View.setMargin(margin: Int, pos: Int) {
+    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    when (pos) {
+        POS_LEFT -> layoutParams.leftMargin = margin
+        POS_TOP -> layoutParams.topMargin = margin
+        POS_RIGHT -> layoutParams.rightMargin = margin
+        POS_BOTTOM -> layoutParams.bottomMargin = margin
+        POS_HOR -> {
+            layoutParams.rightMargin = margin
+            layoutParams.leftMargin = margin
+        }
+
+        POS_VER -> {
+            layoutParams.topMargin = margin
+            layoutParams.bottomMargin = margin
+        }
+
+        POS_ALL -> {
+            layoutParams.topMargin = margin
+            layoutParams.bottomMargin = margin
+            layoutParams.rightMargin = margin
+            layoutParams.leftMargin = margin
+        }
+
+        else -> throw Exception("Wrong Pos!!!")
+    }
+}
+
+fun View.setPaintBackground(opacity: Int, cornerRadius: Float, color: Int) {
+    this.background = ShapeDrawable().apply {
+        shape = RoundRectShape(FloatArray(8) { cornerRadius }, null, null)
+        paint.color = color
+        paint.alpha = opacity
+        paint.style = Paint.Style.FILL
+    }
+}
+
+fun BlurView.setBlur(activity: Activity, blurRadius: Float) {
+    val decorView = activity.window.decorView
+    val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
+    val windowBackground = decorView.background
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        this.setupWith(rootView, RenderScriptBlur(activity)).setFrameClearDrawable(windowBackground)
+            .setBlurRadius(blurRadius)
+    } else {
+        this.setupWith(rootView).setFrameClearDrawable(windowBackground).setBlurRadius(blurRadius)
+    }
+
+    this.outlineProvider = ViewOutlineProvider.BACKGROUND
+    this.setClipToOutline(true)
+}
+
+fun View.clickWithAnimation() {
+    this.apply {
+        val animator = ValueAnimator.ofFloat(1.4f, 1.0f).apply {
+            duration = 300
+            interpolator = OvershootInterpolator()
+            addUpdateListener { animation ->
+                val animatedValue = animation.animatedValue as Float
+                scaleY = animatedValue
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    scaleY = 1f
+                }
+            })
+        }
+        animator.start()
+    }
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun TabLayout.setOnTabDoubleClickListener(doubleClickListener: (TabLayout.Tab) -> Unit) {
+    var lastClickTime = 0L
+    for (i in 0 until tabCount) {
+        val tab = getTabAt(i)
+        tab?.view?.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                val clickTime = SystemClock.elapsedRealtime()
+                if (clickTime - lastClickTime < 300) {
+                    doubleClickListener(tab)
+                }
+                lastClickTime = clickTime
+            }
+            false
+        }
+    }
+}
+
+fun createCustomTabView(layoutId:Int,imageId:Int,
+                        iconId: Int, colorId: Int, context: Context, colorMap: Map<Int,Int>
+): View {
+    val tabView = LayoutInflater.from(context).inflate(layoutId, null)
+    val tabImage = tabView.findViewById<ImageView>(imageId)
+    tabImage.setImageResource(iconId)
+    if (colorId != R.id.color_default) {
+        tabImage.setColorFilter(
+            ContextCompat.getColor(
+                context, colorMap[colorId]!!
+            ), PorterDuff.Mode.SRC_IN
+        )
+    }
+
+    tabView.isClickable = false
+    tabImage.isClickable = false
+    return tabView
+}
+
+fun View.longClickWithAnimation() {
+    this.apply {
+        val rotateLeftRight = ObjectAnimator.ofFloat(this, "rotation", -15f, 15f, -15f, 0f)
+        rotateLeftRight.duration = 100
+        rotateLeftRight.repeatCount = 2
+
+        rotateLeftRight.repeatMode = ObjectAnimator.REVERSE
+
+        val animatorSet = AnimatorSet()
+        animatorSet.play(rotateLeftRight)
+        animatorSet.start()
+    }
+}
+
+fun View.showOrHideOnEnd(needToHide: Boolean) {
+    if (needToHide) {
+        this.animate().translationY(this.height.toFloat()).setDuration(300).setInterpolator(
+            AnticipateInterpolator()
+        ).withEndAction { this.visibility = View.GONE }.start()
+    } else {
+        this.visibility = View.VISIBLE
+        this.animate().translationY(0f).setDuration(300).setInterpolator(
+            OvershootInterpolator(0f)
+        ).start()
+    }
+}
+
+
+
+
+
+@BindingAdapter("drawableColorById")
+fun setRadioButtonDrawableColorById(radioButton: RadioButton, idToColorMap: Map<Int, Int>?) {
+    idToColorMap?.let { map ->
+        val colorResId = map[radioButton.id]
+        colorResId?.let { resId ->
+            val color = ContextCompat.getColor(radioButton.context, resId)
+            val drawable = radioButton.compoundDrawablesRelative[0]
+            if (drawable != null) {
+                drawable.setTint(color)
+                radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            }
+        }
+    }
+}
