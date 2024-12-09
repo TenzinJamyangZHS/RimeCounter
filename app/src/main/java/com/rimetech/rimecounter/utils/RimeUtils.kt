@@ -28,10 +28,12 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.rimetech.rimecounter.R
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlin.math.abs
 
 const val HOME = "Home"
 const val SEARCH = "Search"
@@ -81,10 +83,10 @@ const val TOWARD_LEFT = 0
 const val TOWARD_RIGHT = 1
 const val TOWARD_UP = 2
 const val TOWARD_DOWN = 3
-const val HOME_LIST=0
-const val LIKED_LIST=1
-const val ARCHIVED_LIST=2
-const val LOCKED_LIST=3
+const val HOME_LIST = 0
+const val LIKED_LIST = 1
+const val ARCHIVED_LIST = 2
+const val LOCKED_LIST = 3
 
 
 val tabNameList = mutableListOf(HOME, SEARCH, FAVOR, HISTORY, SETTINGS, ARCHIVE, LOCK)
@@ -127,6 +129,18 @@ val tabIconOutlineRoundList = mutableListOf(
     SETTINGS to R.drawable.outline_rounded_settings_48,
     ARCHIVE to R.drawable.outline_rounded_archive_48,
     LOCK to R.drawable.outline_rounded_lock_48
+)
+
+val colorToRColorList = mutableListOf(
+    COLOR_RED to R.color.color_red, COLOR_PINK to R.color.color_pink,
+    COLOR_PURPLE to R.color.color_purple,
+    COLOR_INDIGO to R.color.color_indigo,
+    COLOR_BLUE to R.color.color_blue,
+    COLOR_GREEN to R.color.color_green,
+    COLOR_YELLOW to R.color.color_yellow,
+    COLOR_ORANGE to R.color.color_orange,
+    COLOR_BROWN to R.color.color_brown,
+    COLOR_TEAL to R.color.color_teal
 )
 
 fun Context.dpToPx(dp: Float): Float {
@@ -246,8 +260,9 @@ fun TabLayout.setOnTabDoubleClickListener(doubleClickListener: (TabLayout.Tab) -
     }
 }
 
-fun createCustomTabView(layoutId:Int,imageId:Int,
-                        iconId: Int, colorId: Int, context: Context, colorMap: Map<Int,Int>
+fun createCustomTabView(
+    layoutId: Int, imageId: Int,
+    iconId: Int, colorId: Int, context: Context, colorMap: Map<Int, Int>
 ): View {
     val tabView = LayoutInflater.from(context).inflate(layoutId, null)
     val tabImage = tabView.findViewById<ImageView>(imageId)
@@ -292,6 +307,57 @@ fun View.showOrHideOnEnd(needToHide: Boolean) {
     }
 }
 
+fun RecyclerView.setItemDecoration(decoration: RecyclerView.ItemDecoration) {
+    while (itemDecorationCount > 0) {
+        removeItemDecorationAt(0)
+    }
+    addItemDecoration(decoration)
+}
+
+fun RecyclerView.removeSpecificItemDecoration(decorationClass: Class<out RecyclerView.ItemDecoration>) {
+    for (i in 0 until itemDecorationCount) {
+        val decoration = getItemDecorationAt(i)
+        if (decoration.javaClass == decorationClass) {
+            removeItemDecoration(decoration)
+            break
+        }
+    }
+}
+
+fun View.setDragOnYAxis() {
+    // 记录视图的初始位置
+    var initialY = 0f
+    var initialTouchY = 0f
+    var isDragging = false
+
+    this.setOnTouchListener { v, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                initialTouchY = event.rawY
+                initialY = v.y
+                isDragging = false
+                true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val dy = event.rawY - initialTouchY
+                if (!isDragging && abs(dy) > 10) {
+                    isDragging = true
+                }
+                if (isDragging) {
+                    v.y = initialY + dy
+                }
+                true
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                if (!isDragging) {
+                    v.performClick()
+                }
+                true
+            }
+            else -> false
+        }
+    }
+}
 
 
 
@@ -305,8 +371,15 @@ fun setRadioButtonDrawableColorById(radioButton: RadioButton, idToColorMap: Map<
             val drawable = radioButton.compoundDrawablesRelative[0]
             if (drawable != null) {
                 drawable.setTint(color)
-                radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+                radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    drawable,
+                    null,
+                    null,
+                    null
+                )
             }
         }
     }
 }
+
+

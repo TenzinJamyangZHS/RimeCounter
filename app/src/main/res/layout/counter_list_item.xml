@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="counter"
+            type="com.rimetech.rimecounter.data.Counter" />
+        <variable
+            name="listCounterViewModel"
+            type="com.rimetech.rimecounter.viewmodels.ListCounterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/list_item_root_alt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/counter_list_item_bg_alt"
+            android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="4dp">
+            <ImageButton
+                android:id="@+id/item_favor_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"/>
+            <ImageButton
+                android:id="@+id/item_reset_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/sharp_reset_40" />
+            <ImageButton
+                android:id="@+id/item_lock_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/sharp_lock_40" />
+            <ImageButton
+                android:id="@+id/item_edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/sharp_edit_note_40" />
+            <ImageButton
+                android:id="@+id/item_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/sharp_delete_forever_40" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/list_item_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/empty_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageButton
+                android:id="@+id/item_minus_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/round_remove_48" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@{counter.name}"
+                    android:textColor="@color/color_layer1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:ignore="NestedWeights,SpeakableTextPresentCheck" />
+
+                <TextView
+                    android:id="@+id/item_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@color/color_layer1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/item_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:hapticFeedbackEnabled="true"
+                android:importantForAccessibility="no"
+                android:onClick="@{(view) ->listCounterViewModel.onListButtonClicked(view,counter)}"
+                android:padding="8dp"
+                android:src="@drawable/round_add_48" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
