@@ -29,10 +29,15 @@ class CounterListAdapter(
 
     inner class CounterListHolder(private val holderBinding: CounterListItemBinding) :
         RecyclerView.ViewHolder(holderBinding.root) {
+        private val settingsViewModel =
+            (fragmentActivity.application as RimeCounter).settingsViewModel
+
         @SuppressLint("SetTextI18n")
         fun bind(counter: Counter) {
             holderBinding.listCounterViewModel = listCounterViewModel
+
             holderBinding.apply {
+                autoRunningIcon.visibility = View.GONE
                 listItemRootAlt.visibility = View.GONE
                 listItemRoot.visibility = View.VISIBLE
                 this.counter = counter
@@ -41,10 +46,12 @@ class CounterListAdapter(
                         ?: throw IllegalArgumentException("Color not found!")
                     val colorToUse = ContextCompat.getColor(fragmentActivity, colorValue)
                     (listItemRoot.background as? GradientDrawable)?.setColor(colorToUse)
+
                 }
                 itemName.isSelected = true
                 itemValue.isSelected = true
                 itemValue.text = counter.currentValue.toString()
+                updateAutoIcon(counter)
                 executePendingBindings()
             }
             holderBinding.listItemRoot.apply {
@@ -86,21 +93,16 @@ class CounterListAdapter(
                         })
                 }
             }
-            holderBinding.autoRunningIcon.apply {
 
-                val settingsViewModel =
-                    (fragmentActivity.application as RimeCounter).settingsViewModel
-                settingsViewModel.observeCounterTask(counter.id, fragmentActivity) { isRun ->
-                    visibility = if (isRun) View.VISIBLE else View.GONE
-                    setImageResource(R.drawable.action_time_24)
-                    setColorFilter(
-                        ContextCompat.getColor(
-                            fragmentActivity,
-                            R.color.color_add_button_bg
-                        )
-                    )
+        }
+
+        private fun updateAutoIcon(counter: Counter) {
+            settingsViewModel.observeCounterTask(counter.id, fragmentActivity) { isRun ->
+                if (isRun) {
+                    holderBinding.autoRunningIcon.visibility=View.VISIBLE
+                } else {
+                    holderBinding.autoRunningIcon.visibility=View.GONE
                 }
-
             }
         }
 

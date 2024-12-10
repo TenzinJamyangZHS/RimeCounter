@@ -96,7 +96,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/auto_running_icon"
-                android:background="@color/color_transparent"/>
+                android:src="@drawable/action_time_24"
+                android:background="@color/color_transparent"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="0dp"

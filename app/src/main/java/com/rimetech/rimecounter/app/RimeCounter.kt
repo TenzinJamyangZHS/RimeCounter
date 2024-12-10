@@ -58,6 +58,7 @@ class RimeCounter: Application() {
     override fun onTerminate() {
         super.onTerminate()
         counterActivityList.clear()
+        settingsViewModel.counterTaskList.clear()
     }
 
 }

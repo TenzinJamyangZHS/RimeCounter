@@ -83,6 +83,7 @@ class CounterActivity : AppCompatActivity() {
         super.onDestroy()
         RimeCounter.counterActivityList.remove(counterId to this)
         settingsViewModel.updateTaskStats(counterId,false)
+        settingsViewModel.removeCounterTask(counterId)
     }
 
 

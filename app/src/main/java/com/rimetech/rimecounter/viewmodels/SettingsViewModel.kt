@@ -232,13 +232,16 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         R.id.theme_light to AppCompatDelegate.MODE_NIGHT_NO
     )
 
-    private val counterTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
+    val counterTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
 
     fun addCounterTask (id:UUID, isRun:Boolean){
         val newLiveData = MutableLiveData(isRun)
         counterTaskList.add(id to newLiveData)
     }
 
+    fun removeCounterTask(id: UUID){
+        counterTaskList.removeIf { it.first==id }
+    }
     fun updateTaskStats(id: UUID,isRun:Boolean){
         counterTaskList.find { it.first==id }?.second?.value=isRun
     }
