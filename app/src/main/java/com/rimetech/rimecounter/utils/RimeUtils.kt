@@ -510,17 +510,6 @@ fun getFormattedDate(date: Date, format: String): String {
     return formatter.format(date)
 }
 
-fun moveToFrontIf(condition: (CounterActivity) -> Boolean) {
-    val targetInstance = RimeCounter.counterActivityList.find { it.second==condition }?.second
-    targetInstance?.let {
-        val intent = Intent(it, it::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-        it.startActivity(intent)
-    }
-}
-
-
-
 @BindingAdapter("drawableColorById")
 fun setRadioButtonDrawableColorById(radioButton: RadioButton, idToColorMap: Map<Int, Int>?) {
     idToColorMap?.let { map ->
