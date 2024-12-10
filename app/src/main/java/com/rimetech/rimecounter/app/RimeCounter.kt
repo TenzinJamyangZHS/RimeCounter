@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.rimetech.rimecounter.repositories.CounterRepository
+import com.rimetech.rimecounter.ui.activities.CounterActivity
 import com.rimetech.rimecounter.utils.THEME_DARK
 import com.rimetech.rimecounter.utils.THEME_LIGHT
 import com.rimetech.rimecounter.utils.THEME_SYSTEM
 import com.rimetech.rimecounter.viewmodels.SettingsViewModel
+import java.util.UUID
 
 class RimeCounter: Application() {
+    companion object {
+        val counterActivityList = mutableListOf<Pair<UUID,CounterActivity>>()
+    }
     val settingsViewModel by lazy {
         ViewModelProvider(
             ViewModelStore(),

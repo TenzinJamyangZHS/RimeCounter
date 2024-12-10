@@ -1,18 +1,23 @@
 package com.rimetech.rimecounter.ui.adapters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rimetech.rimecounter.R
+import com.rimetech.rimecounter.app.RimeCounter
 import com.rimetech.rimecounter.data.Counter
 import com.rimetech.rimecounter.databinding.CounterListItemBinding
+import com.rimetech.rimecounter.ui.activities.CounterActivity
+import com.rimetech.rimecounter.ui.activities.EditorActivity
 import com.rimetech.rimecounter.utils.colorToRColorList
 import com.rimetech.rimecounter.viewmodels.ListCounterViewModel
 
@@ -51,6 +56,19 @@ class CounterListAdapter(
                 }
                 setOnClickListener { view ->
                     view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                    if (!RimeCounter.counterActivityList.any { it.first==counter.id }){
+                        fragmentActivity.startActivity(
+                            Intent(
+                                fragmentActivity,
+                                CounterActivity::class.java
+                            ).apply {
+                                putExtra("counter-id", counter.id)
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                            })
+                    } else {
+                        Toast.makeText(fragmentActivity,"Counter is already running!",Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
             holderBinding.itemFavorButton.apply {
@@ -59,6 +77,9 @@ class CounterListAdapter(
             holderBinding.itemEditButton.apply {
                 setOnClickListener { view ->
                     view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                    fragmentActivity.startActivity(Intent(fragmentActivity,EditorActivity::class.java).apply {
+                        putExtra("counter-id", counter.id)
+                    })
                 }
             }
         }

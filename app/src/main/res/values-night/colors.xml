@@ -12,4 +12,8 @@
     <color name="item_list_alt">#8037474F</color>
 
     <color name="color_add_button_bg">#E6FBDC56</color>
+
+    <color name="color_counter_action_bg">#8037474F</color>
+
+    <color name="no_shape_font_color">#FAFAFA</color>
 </resources>

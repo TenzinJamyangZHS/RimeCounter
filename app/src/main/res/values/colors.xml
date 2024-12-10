@@ -42,4 +42,11 @@
     <color name="color_light_blue">#0288D1</color>
 
 
+    <color name="color_counter_action_bg">#80FAFAFA</color>
+
+
+    <color name="shape_font_color">#FAFAFA</color>
+    <color name="no_shape_font_color">#263238</color>
+
+
 </resources>

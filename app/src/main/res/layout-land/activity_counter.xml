@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="settingsViewModel"
+            type="com.rimetech.rimecounter.viewmodels.SettingsViewModel" />
+        <variable
+            name="counter"
+            type="com.rimetech.rimecounter.data.Counter" />
+        <variable
+            name="counterViewModel"
+            type="com.rimetech.rimecounter.viewmodels.CounterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/counter_root"
+        android:layout_height="match_parent" >
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            android:id="@+id/guideline_v1"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/action_layout"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/counter_action_bg"
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/auto_layout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_v1"
+            android:layout_marginHorizontal="4dp"
+            android:padding="2dp">
+
+            <ImageButton
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:id="@+id/action_minus"
+                android:src="@drawable/sharp_remove_circle_outline_40"
+                android:layout_marginHorizontal="2dp"/>
+            <ImageButton
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:id="@+id/action_media"
+                android:src="@drawable/action_media_40"
+                android:layout_marginHorizontal="2dp"/>
+            <ImageButton
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:id="@+id/action_time"
+                android:src="@drawable/action_time_40"
+                android:layout_marginHorizontal="2dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/guideline_v1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:padding="4dp"
+            android:id="@+id/time_layout">
+
+            <TextView
+                android:id="@+id/start_time"
+                android:layout_width="0dp"
+                android:layout_height="11dp"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Start Time" />
+            <TextView
+                android:id="@+id/running_time"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Running Time" />
+
+        </LinearLayout>
+
+        <TextView
+            android:text="@{counter.name}"
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/auto_layout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_v1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time_layout"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            tools:text="Name" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/auto_layout"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            app:layout_constraintBottom_toTopOf="@id/action_layout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_v1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            android:padding="2dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/auto_icon"
+                android:layout_marginHorizontal="2dp"/>
+            <TextView
+                android:layout_marginHorizontal="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                tools:text="Left Time In Seconds"
+                android:id="@+id/auto_text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="16dp"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_v1"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/add_shape">
+            <TextView
+                android:text="@{String.valueOf(counter.currentValue)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:id="@+id/value"
+                android:textStyle="bold"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="24sp"
+                android:autoSizeMaxTextSize="64sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textSize="64sp"
+                tools:text="value" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

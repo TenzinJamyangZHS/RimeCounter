@@ -10,6 +10,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.drawable.ShapeDrawable
@@ -26,6 +27,7 @@ import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.RadioButton
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +35,9 @@ import com.google.android.material.tabs.TabLayout
 import com.rimetech.rimecounter.R
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 
 const val HOME = "Home"
@@ -443,6 +448,66 @@ fun View.setOnDoubleClickListener(interval: Long = 300, onDoubleClick: (View) ->
         false
     }
 }
+
+@ColorInt
+fun adjustColorTowardsBlackOrWhite(@ColorInt color: Int, factor: Float): Int {
+    require(factor in -1.0..1.0) { "factor 必须在 [-1.0, 1.0] 范围内" }
+
+    val alpha = Color.alpha(color)
+    val red = Color.red(color)
+    val green = Color.green(color)
+    val blue = Color.blue(color)
+
+    val newRed = if (factor < 0) {
+        (red * (1 + factor)).coerceIn(0f, 255f).toInt()
+    } else {
+        (red + (255 - red) * factor).coerceIn(0f, 255f).toInt()
+    }
+
+    val newGreen = if (factor < 0) {
+        (green * (1 + factor)).coerceIn(0f, 255f).toInt()
+    } else {
+        (green + (255 - green) * factor).coerceIn(0f, 255f).toInt()
+    }
+
+    val newBlue = if (factor < 0) {
+        (blue * (1 + factor)).coerceIn(0f, 255f).toInt()
+    } else {
+        (blue + (255 - blue) * factor).coerceIn(0f, 255f).toInt()
+    }
+
+    return Color.argb(alpha, newRed, newGreen, newBlue)
+}
+
+fun getTimeDifferenceInSeconds(date: Date): Long {
+    val currentTime = Date()
+    val timeDifference = currentTime.time - date.time
+    return timeDifference / 1000
+}
+
+fun formatDuration(seconds: Long): String {
+    val years = seconds / (365 * 24 * 60 * 60)
+    val months = (seconds % (365 * 24 * 60 * 60)) / (30 * 24 * 60 * 60)
+    val days = (seconds % (30 * 24 * 60 * 60)) / (24 * 60 * 60)
+    val hours = (seconds % (24 * 60 * 60)) / (60 * 60)
+    val minutes = (seconds % (60 * 60)) / 60
+    val remainingSeconds = seconds % 60
+    return buildString {
+        if (years > 0) append("$years y ")
+        if (months > 0) append("$months m ")
+        if (days > 0) append("$days d ")
+        if (hours > 0) append("$hours h ")
+        if (minutes > 0) append("$minutes m ")
+        append("$remainingSeconds s ")
+    }.trim()
+}
+
+fun getFormattedDate(date: Date, format: String): String {
+    val formatter = SimpleDateFormat(format, Locale.getDefault())
+    return formatter.format(date)
+}
+
+
 
 
 @BindingAdapter("drawableColorById")
