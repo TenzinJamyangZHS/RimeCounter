@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="listCounterViewModel"
+            type="com.rimetech.rimecounter.viewmodels.ListCounterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/search_root"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerview"/>
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blur_view"
+            android:elevation="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+            <SearchView
+                android:iconifiedByDefault="false"
+                android:layout_marginHorizontal="30dp"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:id="@+id/search_view"/>
+        </eightbitlab.com.blurview.BlurView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

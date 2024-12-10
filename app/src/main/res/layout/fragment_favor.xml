@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="listCounterViewModel"
+            type="com.rimetech.rimecounter.viewmodels.ListCounterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/favor_root"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:adapter="@{listCounterViewModel.counterListLikedAdapter}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerview"/>
+        <TextView
+            android:visibility="gone"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:text="No favored counter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/empty_text"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

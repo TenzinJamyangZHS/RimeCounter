@@ -28,18 +28,29 @@
             android:layout_height="match_parent"
             android:id="@+id/empty_text"/>
 
-        <ImageButton
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blur_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:elevation="6dp"
+            android:onClick="onAddCounterButtonClicked"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/add_counter_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/round_add_64"
-            android:background="@drawable/empty_bg"
-            android:transitionName="app_icon_transition"
-            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+            tools:ignore="DuplicateClickableBoundsCheck">
+
+            <ImageButton
+                android:id="@+id/add_counter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/color_transparent"
+                android:src="@drawable/round_add_64"
+                android:transitionName="app_icon_transition"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        </eightbitlab.com.blurview.BlurView>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

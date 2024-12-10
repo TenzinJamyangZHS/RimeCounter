@@ -132,7 +132,8 @@ val tabIconOutlineRoundList = mutableListOf(
 )
 
 val colorToRColorList = mutableListOf(
-    COLOR_RED to R.color.color_red, COLOR_PINK to R.color.color_pink,
+    COLOR_RED to R.color.color_red,
+    COLOR_PINK to R.color.color_pink,
     COLOR_PURPLE to R.color.color_purple,
     COLOR_INDIGO to R.color.color_indigo,
     COLOR_BLUE to R.color.color_blue,
@@ -141,6 +142,19 @@ val colorToRColorList = mutableListOf(
     COLOR_ORANGE to R.color.color_orange,
     COLOR_BROWN to R.color.color_brown,
     COLOR_TEAL to R.color.color_teal
+)
+
+val colorToRIdList = mutableListOf(
+    COLOR_RED to R.id.color_red,
+    COLOR_PINK to R.id.color_pink,
+    COLOR_PURPLE to R.id.color_purple,
+    COLOR_INDIGO to R.id.color_indigo,
+    COLOR_BLUE to R.id.color_blue,
+    COLOR_GREEN to R.id.color_green,
+    COLOR_YELLOW to R.id.color_yellow,
+    COLOR_ORANGE to R.id.color_orange,
+    COLOR_BROWN to R.id.color_brown,
+    COLOR_TEAL to R.id.color_teal
 )
 
 fun Context.dpToPx(dp: Float): Float {
@@ -250,7 +264,7 @@ fun TabLayout.setOnTabDoubleClickListener(doubleClickListener: (TabLayout.Tab) -
         tab?.view?.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 val clickTime = SystemClock.elapsedRealtime()
-                if (clickTime - lastClickTime < 300) {
+                if (clickTime - lastClickTime < 200) {
                     doubleClickListener(tab)
                 }
                 lastClickTime = clickTime
@@ -338,6 +352,7 @@ fun View.setDragOnYAxis() {
                 isDragging = false
                 true
             }
+
             MotionEvent.ACTION_MOVE -> {
                 val dy = event.rawY - initialTouchY
                 if (!isDragging && abs(dy) > 10) {
@@ -348,18 +363,86 @@ fun View.setDragOnYAxis() {
                 }
                 true
             }
+
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!isDragging) {
                     v.performClick()
                 }
                 true
             }
+
             else -> false
         }
     }
 }
 
 
+fun View.clickWithAnimation2() {
+    this.apply {
+        val scaleUp = ValueAnimator.ofFloat(1f, 1.1f).apply {
+            duration = 150
+            interpolator = OvershootInterpolator()
+            addUpdateListener { animation ->
+                val animatedValue = animation.animatedValue as Float
+                scaleX = animatedValue
+                scaleY = animatedValue
+            }
+        }
+
+        val scaleDown = ValueAnimator.ofFloat(1.1f, 0.9f).apply {
+            duration = 150
+            interpolator = OvershootInterpolator()
+            addUpdateListener { animation ->
+                val animatedValue = animation.animatedValue as Float
+                scaleX = animatedValue
+                scaleY = animatedValue
+            }
+        }
+
+        val scaleRestore = ValueAnimator.ofFloat(0.9f, 1f).apply {
+            duration = 150
+            interpolator = OvershootInterpolator()
+            addUpdateListener { animation ->
+                val animatedValue = animation.animatedValue as Float
+                scaleX = animatedValue
+                scaleY = animatedValue
+            }
+        }
+
+        scaleUp.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                scaleDown.start()
+            }
+        })
+
+        scaleDown.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                scaleRestore.start()
+            }
+        })
+
+        scaleUp.start()
+    }
+
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun View.setOnDoubleClickListener(interval: Long = 300, onDoubleClick: (View) -> Unit) {
+    var lastClickTime = 0L
+
+    setOnTouchListener { _, event ->
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val currentTime = SystemClock.elapsedRealtime()
+            if (currentTime - lastClickTime <= interval) {
+                onDoubleClick(this)
+            }
+            lastClickTime = currentTime
+        }
+        false
+    }
+}
 
 
 @BindingAdapter("drawableColorById")

@@ -1,5 +1,6 @@
 package com.rimetech.rimecounter.ui.activities
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.rimetech.rimecounter.utils.POS_BOTTOM
 import com.rimetech.rimecounter.utils.SEARCH
 import com.rimetech.rimecounter.utils.SETTINGS
 import com.rimetech.rimecounter.utils.clickWithAnimation
+import com.rimetech.rimecounter.utils.clickWithAnimation2
 import com.rimetech.rimecounter.utils.createCustomTabView
 import com.rimetech.rimecounter.utils.dpToPx
 import com.rimetech.rimecounter.utils.getNavigationBarHeight
@@ -392,6 +394,12 @@ class MainActivity : AppCompatActivity() {
         settingsViewModel.saveSettings()
         setPagerAdapter()
         this.recreate()
+    }
+
+    fun onAddCounterButtonClicked(view: View) {
+        view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+        view.clickWithAnimation2()
+        startActivity(Intent(this, EditorActivity::class.java))
     }
 
 }

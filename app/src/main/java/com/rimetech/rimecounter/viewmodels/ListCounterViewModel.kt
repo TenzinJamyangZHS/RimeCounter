@@ -98,6 +98,10 @@ class ListCounterViewModel(application: Application) : AndroidViewModel(applicat
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            R.id.list_item_root_alt->{
+                view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                updateCounter(counter)
+            }
 
         }
     }
