@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.rimetech.rimecounter.R
@@ -32,6 +33,7 @@ import com.rimetech.rimecounter.utils.THEME_DARK
 import com.rimetech.rimecounter.utils.THEME_LIGHT
 import com.rimetech.rimecounter.utils.THEME_SYSTEM
 import com.rimetech.rimecounter.utils.tabNameList
+import java.util.UUID
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences = getApplication<Application>().getSharedPreferences("app-settings", Context.MODE_PRIVATE)
@@ -229,6 +231,26 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         R.id.theme_dark to AppCompatDelegate.MODE_NIGHT_YES,
         R.id.theme_light to AppCompatDelegate.MODE_NIGHT_NO
     )
+
+    private val counterTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
+
+    fun addCounterTask (id:UUID, isRun:Boolean){
+        val newLiveData = MutableLiveData(isRun)
+        counterTaskList.add(id to newLiveData)
+    }
+
+    fun updateTaskStats(id: UUID,isRun:Boolean){
+        counterTaskList.find { it.first==id }?.second?.value=isRun
+    }
+
+    fun observeCounterTask(id: UUID,lifecycleOwner: LifecycleOwner,observe: (Boolean)->Unit){
+        counterTaskList.find { it.first==id }?.second?.let {
+            it.observe(lifecycleOwner){
+                value-> observe(value)
+            }
+        }
+    }
+
 
 
 

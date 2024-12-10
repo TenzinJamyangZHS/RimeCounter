@@ -10,6 +10,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -33,6 +34,8 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.rimetech.rimecounter.R
+import com.rimetech.rimecounter.app.RimeCounter
+import com.rimetech.rimecounter.ui.activities.CounterActivity
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.text.SimpleDateFormat
@@ -507,6 +510,14 @@ fun getFormattedDate(date: Date, format: String): String {
     return formatter.format(date)
 }
 
+fun moveToFrontIf(condition: (CounterActivity) -> Boolean) {
+    val targetInstance = RimeCounter.counterActivityList.find { it.second==condition }?.second
+    targetInstance?.let {
+        val intent = Intent(it, it::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        it.startActivity(intent)
+    }
+}
 
 
 

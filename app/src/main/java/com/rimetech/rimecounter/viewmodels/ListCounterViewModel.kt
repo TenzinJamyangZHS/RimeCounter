@@ -70,6 +70,7 @@ class ListCounterViewModel(application: Application) : AndroidViewModel(applicat
                 view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
                 counter.currentValue = counter.resetValue
                 counter.startTime = Date()
+                counter.isRunning=false
                 Toast.makeText(
                     getApplication(), if (counter.currentValue == counter.resetValue
                     ) "Reset!" else "Not Reset!", Toast.LENGTH_SHORT

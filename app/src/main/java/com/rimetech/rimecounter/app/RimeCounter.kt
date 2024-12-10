@@ -2,6 +2,7 @@ package com.rimetech.rimecounter.app
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -16,6 +17,18 @@ import java.util.UUID
 class RimeCounter: Application() {
     companion object {
         val counterActivityList = mutableListOf<Pair<UUID,CounterActivity>>()
+        private fun getActivityByUUID(uuid: UUID): CounterActivity? {
+            return counterActivityList.find { it.first == uuid }?.second
+        }
+        fun moveToFrontByUUID(uuid: UUID) {
+            val activity = getActivityByUUID(uuid)
+            activity?.let {
+                val intent = Intent(it, it::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                }
+                it.startActivity(intent)
+            }
+        }
     }
     val settingsViewModel by lazy {
         ViewModelProvider(
@@ -41,4 +54,10 @@ class RimeCounter: Application() {
             }
         )
     }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        counterActivityList.clear()
+    }
+
 }

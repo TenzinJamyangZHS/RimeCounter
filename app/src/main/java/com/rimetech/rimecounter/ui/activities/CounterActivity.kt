@@ -57,6 +57,7 @@ class CounterActivity : AppCompatActivity() {
         getCounterId()
         RimeCounter.counterActivityList.add(counterId to this)
         settingsViewModel = (application as RimeCounter).settingsViewModel
+        settingsViewModel.addCounterTask(counterId,false)
         counterBinding.settingsViewModel = settingsViewModel
         counterBinding.counterViewModel = counterViewModel
         counterBinding.lifecycleOwner = this
@@ -81,6 +82,7 @@ class CounterActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         RimeCounter.counterActivityList.remove(counterId to this)
+        settingsViewModel.updateTaskStats(counterId,false)
     }
 
 
@@ -278,6 +280,7 @@ class CounterActivity : AppCompatActivity() {
             counterBinding.addShape.isEnabled = !auto
             counterBinding.actionMedia.isEnabled=!auto
             counterBinding.actionMinus.isEnabled=!auto
+            settingsViewModel.updateTaskStats(counterId,auto)
             onBackPressedCallback.isEnabled = auto
             counterBinding.autoIcon.setImageResource(if (auto) R.drawable.action_time_24 else R.drawable.empty_bg)
             counterBinding.autoText.visibility = if (auto) View.VISIBLE else View.GONE

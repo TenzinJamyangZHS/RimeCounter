@@ -7,7 +7,6 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -21,6 +20,7 @@ import com.rimetech.rimecounter.ui.activities.EditorActivity
 import com.rimetech.rimecounter.utils.colorToRColorList
 import com.rimetech.rimecounter.viewmodels.ListCounterViewModel
 
+@Suppress("DEPRECATION")
 class CounterListAdapter(
     private val counterList: MutableList<Counter>,
     private val listCounterViewModel: ListCounterViewModel
@@ -56,17 +56,17 @@ class CounterListAdapter(
                 }
                 setOnClickListener { view ->
                     view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-                    if (!RimeCounter.counterActivityList.any { it.first==counter.id }){
+                    if (!RimeCounter.counterActivityList.any { it.first == counter.id }) {
                         fragmentActivity.startActivity(
                             Intent(
                                 fragmentActivity,
                                 CounterActivity::class.java
                             ).apply {
                                 putExtra("counter-id", counter.id)
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                             })
                     } else {
-                        Toast.makeText(fragmentActivity,"Counter is already running!",Toast.LENGTH_SHORT).show()
+                        RimeCounter.moveToFrontByUUID(counter.id)
                     }
 
                 }
@@ -77,10 +77,30 @@ class CounterListAdapter(
             holderBinding.itemEditButton.apply {
                 setOnClickListener { view ->
                     view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-                    fragmentActivity.startActivity(Intent(fragmentActivity,EditorActivity::class.java).apply {
-                        putExtra("counter-id", counter.id)
-                    })
+                    fragmentActivity.startActivity(
+                        Intent(
+                            fragmentActivity,
+                            EditorActivity::class.java
+                        ).apply {
+                            putExtra("counter-id", counter.id)
+                        })
                 }
+            }
+            holderBinding.autoRunningIcon.apply {
+
+                val settingsViewModel =
+                    (fragmentActivity.application as RimeCounter).settingsViewModel
+                settingsViewModel.observeCounterTask(counter.id, fragmentActivity) { isRun ->
+                    visibility = if (isRun) View.VISIBLE else View.GONE
+                    setImageResource(R.drawable.action_time_24)
+                    setColorFilter(
+                        ContextCompat.getColor(
+                            fragmentActivity,
+                            R.color.color_add_button_bg
+                        )
+                    )
+                }
+
             }
         }
 
