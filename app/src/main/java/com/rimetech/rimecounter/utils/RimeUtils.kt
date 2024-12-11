@@ -33,7 +33,6 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.rimetech.rimecounter.R
-import com.rimetech.rimecounter.data.Counter
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.text.SimpleDateFormat

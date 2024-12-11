@@ -94,6 +94,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val _isMonet = MutableLiveData<Boolean>()
     val isMonet : MutableLiveData<Boolean> get() = _isMonet
+    @Suppress("unused")
     fun setIsMonet(check:Boolean):Boolean{
         _isMonet.value=check
         return check
@@ -105,6 +106,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     private val _isBlur = MutableLiveData<Boolean>()
     val isBlur : MutableLiveData<Boolean> get() = _isBlur
+    @Suppress("unused")
     fun setIsBlur(check:Boolean):Boolean{
         _isBlur.value=check
         return check
