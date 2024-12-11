@@ -67,6 +67,7 @@ class LockFragment : ListFragment() {
         lockBinding.recyclerview.visibility = View.GONE
         lockBinding.emptyText.visibility = View.GONE
         lockBinding.passwordLayout.visibility = View.VISIBLE
+        lockBinding.lockScrollView.visibility=View.VISIBLE
         val savedPassword = getPassword(requireActivity())
         if (savedPassword == null) {
             setSetPasswordSetUI()
@@ -111,6 +112,7 @@ class LockFragment : ListFragment() {
                                 ).show()
                             } else {
                                 lockBinding.passwordLayout.visibility=View.GONE
+                                lockBinding.lockScrollView.visibility=View.GONE
                                 setAdapter(
                                     lockBinding.recyclerview,
                                     LOCKED_LIST,

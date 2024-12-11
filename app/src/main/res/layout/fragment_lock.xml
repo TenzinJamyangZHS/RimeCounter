@@ -69,6 +69,7 @@
                     tools:ignore="TextFields" />
 
                 <EditText
+                    android:visibility="gone"
                     android:id="@+id/password_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
