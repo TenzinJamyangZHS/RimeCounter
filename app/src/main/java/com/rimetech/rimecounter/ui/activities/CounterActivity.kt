@@ -57,7 +57,7 @@ class CounterActivity : AppCompatActivity() {
         getCounterId()
         RimeCounter.counterActivityList.add(counterId to this)
         settingsViewModel = (application as RimeCounter).settingsViewModel
-        settingsViewModel.addCounterTask(counterId,false)
+        settingsViewModel.addCounterTask(counterId, false)
         counterBinding.settingsViewModel = settingsViewModel
         counterBinding.counterViewModel = counterViewModel
         counterBinding.lifecycleOwner = this
@@ -82,10 +82,9 @@ class CounterActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         RimeCounter.counterActivityList.remove(counterId to this)
-        settingsViewModel.updateTaskStats(counterId,false)
+        settingsViewModel.updateTaskStats(counterId, false)
         settingsViewModel.removeCounterTask(counterId)
     }
-
 
 
     private fun setMargin() {
@@ -105,9 +104,9 @@ class CounterActivity : AppCompatActivity() {
     }
 
     private fun setUI(counter: Counter) {
-        counterBinding.name.isSelected=true
-        counterBinding.startTime.isSelected=true
-        counterBinding.runningTime.isSelected=true
+        counterBinding.name.isSelected = true
+        counterBinding.startTime.isSelected = true
+        counterBinding.runningTime.isSelected = true
         val createDate = getFormattedDate(counter.startTime, "yyyy-MM-dd-HH:mm:ss")
         counterBinding.startTime.text = createDate
 
@@ -115,36 +114,9 @@ class CounterActivity : AppCompatActivity() {
             settingsViewModel.counterBackground.observe(this) { background ->
                 settingsViewModel.isMonet.observe(this) { monet ->
                     settingsViewModel.themeId.observe(this) { theme ->
-                        when (shape) {
-                            R.id.null_shape -> {
-                                counterBinding.addShape.setBackgroundColor(
-                                    ContextCompat.getColor(this, R.color.color_transparent)
-                                )
-                                counterBinding.value.setTextColor(ContextCompat.getColor(this,R.color.no_shape_font_color))
-                            }
 
-                            R.id.round_shape -> {
-                                counterBinding.addShape.setPaintBackground(255,
-                                    this.dpToPx(2000f),
-                                    ContextCompat.getColor(this,
-                                        colorToRColorList.find { it.first == counter.color }?.second
-                                            ?: throw IllegalArgumentException("Counter color not found!")
-                                    )
-                                )
-                                counterBinding.value.setTextColor(ContextCompat.getColor(this,R.color.shape_font_color))
-                            }
+                        setAddShape(shape, counter)
 
-                            R.id.round_rectangle_shape -> {
-                                counterBinding.addShape.setPaintBackground(255,
-                                    this.dpToPx(24f),
-                                    ContextCompat.getColor(this,
-                                        colorToRColorList.find { it.first == counter.color }?.second
-                                            ?: throw IllegalArgumentException("Counter color not found!")
-                                    )
-                                )
-                                counterBinding.value.setTextColor(ContextCompat.getColor(this,R.color.shape_font_color))
-                            }
-                        }
                         when (background) {
                             R.id.normal_bg -> {
                                 counterBinding.counterRoot.setBackgroundColor(
@@ -156,100 +128,159 @@ class CounterActivity : AppCompatActivity() {
                             }
 
                             R.id.from_counter_bg -> {
-                                val colorValue =
-                                    colorToRColorList.find { it.first == counter.color }?.second
-                                        ?: throw IllegalArgumentException("Counter color not found!")
-                                val counterColor = ContextCompat.getColor(this, colorValue)
-                                val radio = when (theme) {
-                                    R.id.theme_system -> {
-                                        if (getSystemService(
-                                                UiModeManager::class.java
-                                            ).nightMode == UiModeManager.MODE_NIGHT_YES
-                                        ) -0.8f else 0.8f
-                                    }
-
-                                    R.id.theme_light -> 0.8f
-                                    R.id.theme_dark -> -0.8f
-                                    else -> throw IllegalArgumentException("Unknown Theme!")
-                                }
-                                val backgroundColor =
-                                    adjustColorTowardsBlackOrWhite(counterColor, radio)
-                                counterBinding.counterRoot.setBackgroundColor(backgroundColor)
+                                setFromCounter(counter, theme)
                             }
 
                             R.id.amoled_bg -> {
-                                counterBinding.counterRoot.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.black
-                                    )
-                                )
-                                counterBinding.addShape.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.black
-                                    )
-                                )
-                                counterBinding.actionLayout.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.black
-                                    )
-                                )
-                                counterBinding.startTime.setTextColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.amoled_font
-                                    )
-                                )
-                                counterBinding.runningTime.setTextColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.amoled_font
-                                    )
-                                )
-                                counterBinding.value.setTextColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.amoled_font
-                                    )
-                                )
-                                counterBinding.autoText.setTextColor(
-                                    ContextCompat.getColor(
-                                        this,
-                                        R.color.amoled_font
-                                    )
-                                )
-                                counterBinding.actionMinus.setColorFilter(
-                                    ContextCompat.getColor(
-                                        this, R.color.amoled_font
-                                    ), PorterDuff.Mode.SRC_IN
-                                )
-                                counterBinding.actionMedia.setColorFilter(
-                                    ContextCompat.getColor(
-                                        this, R.color.amoled_font
-                                    ), PorterDuff.Mode.SRC_IN
-                                )
-                                counterBinding.actionTime.setColorFilter(
-                                    ContextCompat.getColor(
-                                        this, R.color.amoled_font
-                                    ), PorterDuff.Mode.SRC_IN
-                                )
-                                counterBinding.autoIcon.setColorFilter(
-                                    ContextCompat.getColor(
-                                        this, R.color.amoled_font
-                                    ), PorterDuff.Mode.SRC_IN
-                                )
+                                setAmoled()
                             }
                         }
 
                     }
 
-
                 }
 
             }
         }
+    }
+
+    private fun setAddShape(shape: Int, counter: Counter) {
+        when (shape) {
+            R.id.null_shape -> {
+                counterBinding.addShape.setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.color_transparent)
+                )
+                counterBinding.value.setTextColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.no_shape_font_color
+                    )
+                )
+            }
+
+            R.id.round_shape -> {
+                counterBinding.addShape.setPaintBackground(
+                    255,
+                    this.dpToPx(2000f),
+                    ContextCompat.getColor(
+                        this,
+                        colorToRColorList.find { it.first == counter.color }?.second
+                            ?: throw IllegalArgumentException("Counter color not found!")
+                    )
+                )
+                counterBinding.value.setTextColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.shape_font_color
+                    )
+                )
+            }
+
+            R.id.round_rectangle_shape -> {
+                counterBinding.addShape.setPaintBackground(
+                    255,
+                    this.dpToPx(24f),
+                    ContextCompat.getColor(
+                        this,
+                        colorToRColorList.find { it.first == counter.color }?.second
+                            ?: throw IllegalArgumentException("Counter color not found!")
+                    )
+                )
+                counterBinding.value.setTextColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.shape_font_color
+                    )
+                )
+            }
+        }
+    }
+
+    private fun setFromCounter(counter: Counter, theme: Int) {
+        val colorValue =
+            colorToRColorList.find { it.first == counter.color }?.second
+                ?: throw IllegalArgumentException("Counter color not found!")
+        val counterColor = ContextCompat.getColor(this, colorValue)
+        val radio = when (theme) {
+            R.id.theme_system -> {
+                if (getSystemService(
+                        UiModeManager::class.java
+                    ).nightMode == UiModeManager.MODE_NIGHT_YES
+                ) -0.8f else 0.8f
+            }
+
+            R.id.theme_light -> 0.8f
+            R.id.theme_dark -> -0.8f
+            else -> throw IllegalArgumentException("Unknown Theme!")
+        }
+        val backgroundColor =
+            adjustColorTowardsBlackOrWhite(counterColor, radio)
+        counterBinding.counterRoot.setBackgroundColor(backgroundColor)
+    }
+
+    private fun setAmoled() {
+        counterBinding.counterRoot.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.black
+            )
+        )
+        counterBinding.addShape.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.black
+            )
+        )
+        counterBinding.actionLayout.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.black
+            )
+        )
+        counterBinding.startTime.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.amoled_font
+            )
+        )
+        counterBinding.runningTime.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.amoled_font
+            )
+        )
+        counterBinding.value.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.amoled_font
+            )
+        )
+        counterBinding.autoText.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.amoled_font
+            )
+        )
+        counterBinding.actionMinus.setColorFilter(
+            ContextCompat.getColor(
+                this, R.color.amoled_font
+            ), PorterDuff.Mode.SRC_IN
+        )
+        counterBinding.actionMedia.setColorFilter(
+            ContextCompat.getColor(
+                this, R.color.amoled_font
+            ), PorterDuff.Mode.SRC_IN
+        )
+        counterBinding.actionTime.setColorFilter(
+            ContextCompat.getColor(
+                this, R.color.amoled_font
+            ), PorterDuff.Mode.SRC_IN
+        )
+        counterBinding.autoIcon.setColorFilter(
+            ContextCompat.getColor(
+                this, R.color.amoled_font
+            ), PorterDuff.Mode.SRC_IN
+        )
     }
 
     private fun updateTimeDifference(date: Date) {
@@ -275,13 +306,12 @@ class CounterActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setAutoCount(){
-        counterViewModel.counterAuto.observe(this){
-            auto->
+    private fun setAutoCount() {
+        counterViewModel.counterAuto.observe(this) { auto ->
             counterBinding.addShape.isEnabled = !auto
-            counterBinding.actionMedia.isEnabled=!auto
-            counterBinding.actionMinus.isEnabled=!auto
-            settingsViewModel.updateTaskStats(counterId,auto)
+            counterBinding.actionMedia.isEnabled = !auto
+            counterBinding.actionMinus.isEnabled = !auto
+            settingsViewModel.updateTaskStats(counterId, auto)
             onBackPressedCallback.isEnabled = auto
             counterBinding.autoIcon.setImageResource(if (auto) R.drawable.action_time_24 else R.drawable.empty_bg)
             counterBinding.autoText.visibility = if (auto) View.VISIBLE else View.GONE
@@ -290,8 +320,6 @@ class CounterActivity : AppCompatActivity() {
             counterBinding.autoText.text = " left $time seconds "
         }
     }
-
-
 
 
 }
