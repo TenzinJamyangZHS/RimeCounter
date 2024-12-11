@@ -2,7 +2,7 @@
 
 Rime Counter is a simple counter app for android written in kotlin.
 
-## Thanks To
+## Thanks
 https://github.com/Dimezis/BlurView
 
 ## Screenshots
