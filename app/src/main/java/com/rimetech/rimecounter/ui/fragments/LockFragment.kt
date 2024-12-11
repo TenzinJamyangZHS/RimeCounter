@@ -4,6 +4,7 @@ package com.rimetech.rimecounter.ui.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,9 @@ import com.rimetech.rimecounter.R
 import com.rimetech.rimecounter.app.RimeCounter
 import com.rimetech.rimecounter.databinding.FragmentLockBinding
 import com.rimetech.rimecounter.utils.LOCKED_LIST
+import com.rimetech.rimecounter.utils.POS_TOP
+import com.rimetech.rimecounter.utils.getStatusBarHeight
+import com.rimetech.rimecounter.utils.setMargin
 import com.rimetech.rimecounter.viewmodels.ListCounterViewModel
 
 @Suppress("DEPRECATION")
@@ -35,7 +39,7 @@ class LockFragment : ListFragment() {
         setLayoutManager(lockBinding.recyclerview)
         setTopDecoration(lockBinding.recyclerview)
         setListListener(lockBinding.recyclerview)
-
+        setMargin()
         return lockBinding.root
     }
 
@@ -51,6 +55,14 @@ class LockFragment : ListFragment() {
         clearPassWordInput()
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        setMargin()
+    }
+
+    private fun setMargin(){
+        lockBinding.passwordLayout.setMargin(getStatusBarHeight(requireActivity()), POS_TOP)
+    }
     private fun checkPassword() {
         lockBinding.recyclerview.visibility = View.GONE
         lockBinding.emptyText.visibility = View.GONE

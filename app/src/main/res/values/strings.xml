@@ -26,4 +26,20 @@
     <string name="monet_need_android_12">Monet need Android 12+</string>
     <string name="set_password">Set Password</string>
     <string name="check_password">Check Password</string>
+    <string name="type_a_counter_name">Type a counter name</string>
+    <string name="choose_a_counter_color">Choose a counter color</string>
+    <string name="set_counter_current_value">Set counter current value</string>
+    <string name="set_counter_reset_value">Set counter reset value</string>
+    <string name="set_counter_increase_value">Set counter increase value</string>
+    <string name="set_counter_decrease_value">Set counter decrease value</string>
+    <string name="set_counter_auto_in_seconds">Set counter auto in seconds</string>
+    <string name="choose_a_media_file">Choose a media file</string>
+    <string name="choose">Choose</string>
+    <string name="no_archived_counter">No archived counter</string>
+    <string name="no_favored_counter">No favored counter</string>
+    <string name="no_counters_found_n_please_add_new_counter">No counters found!\n Please add new counter!</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="your_need_password_to_access_the_locked_counters">Your need password to access the locked counters.</string>
+    <string name="type_your_original_password_here">Type your original password here</string>
+    <string name="no_locked_counter">No locked counter</string>
 </resources>

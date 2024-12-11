@@ -30,105 +30,114 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="No locked counter"
+            android:text="@string/no_locked_counter"
             android:textSize="28sp"
             android:textStyle="bold"
             android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/password_layout"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:gravity="center"
-                android:text="Your need password to access the locked counters."
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/password_old_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Type your original password here"
-                android:importantForAutofill="no"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:minHeight="50dp"
-                android:text="@={settingsViewModel.originalPassword}"
-                android:visibility="gone"
-                tools:ignore="TextFields" />
-
-            <EditText
-                android:id="@+id/password_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Type your password here"
-                android:importantForAutofill="no"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:minHeight="50dp"
-                android:text="@={settingsViewModel.lockedPassword}"
-                tools:ignore="TextFields" />
-
-            <EditText
-                android:id="@+id/password_confirm_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Retype your password here"
-                android:importantForAutofill="no"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:minHeight="50dp"
-                android:text="@={settingsViewModel.confirmPassword}"
-                android:visibility="gone"
-                tools:ignore="TextFields" />
-
+            android:id="@+id/lock_scroll_view">
             <LinearLayout
-                android:id="@+id/password_button_layout"
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
+                android:gravity="top|center"
+                android:orientation="vertical"
                 android:padding="16dp">
 
-                <Button
-                    android:id="@+id/password_button"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:textAllCaps="false"
-                    tools:text="Check" />
+                    android:layout_marginVertical="16dp"
+                    android:gravity="center"
+                    android:text="@string/your_need_password_to_access_the_locked_counters"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/password_reset_button"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/password_old_edit"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:text="Reset Password"
-                    android:textAllCaps="false"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/password_save_button"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="8dp"
-                    android:textAllCaps="false"
+                    android:hint="@string/type_your_original_password_here"
+                    android:importantForAutofill="no"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:minHeight="50dp"
+                    android:text="@={settingsViewModel.originalPassword}"
                     android:visibility="gone"
-                    android:text="Save" />
-            </LinearLayout>
+                    tools:ignore="TextFields" />
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/password_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:minHeight="50dp"
+                    android:text="@={settingsViewModel.lockedPassword}"
+                    tools:ignore="TextFields,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+                <EditText
+                    android:id="@+id/password_confirm_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:minHeight="50dp"
+                    android:text="@={settingsViewModel.confirmPassword}"
+                    android:visibility="gone"
+                    tools:ignore="TextFields" />
+
+                <LinearLayout
+                    android:id="@+id/password_button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <Button
+                        android:id="@+id/password_button"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:textAllCaps="false"
+                        tools:text="Check" />
+
+                    <Button
+                        android:id="@+id/password_reset_button"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="@string/reset_password"
+                        android:textAllCaps="false"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/password_save_button"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        android:text="@string/save" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:orientation="vertical"
+                    tools:ignore="UselessLeaf" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

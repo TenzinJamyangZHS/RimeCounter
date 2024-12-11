@@ -10,7 +10,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -34,8 +33,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.rimetech.rimecounter.R
-import com.rimetech.rimecounter.app.RimeCounter
-import com.rimetech.rimecounter.ui.activities.CounterActivity
+import com.rimetech.rimecounter.data.Counter
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.text.SimpleDateFormat
@@ -95,6 +93,7 @@ const val HOME_LIST = 0
 const val LIKED_LIST = 1
 const val ARCHIVED_LIST = 2
 const val LOCKED_LIST = 3
+const val HISTORY_LIST = 4
 
 
 val tabNameList = mutableListOf(HOME, SEARCH, FAVOR, HISTORY, SETTINGS, ARCHIVE, LOCK)

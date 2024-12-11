@@ -68,6 +68,7 @@ class ListCounterViewModel(application: Application) : AndroidViewModel(applicat
 
             R.id.item_reset_button -> {
                 view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                counter.usageList.add((counter.startTime to Date()) to counter.currentValue)
                 counter.currentValue = counter.resetValue
                 counter.startTime = Date()
                 counter.isRunning=false

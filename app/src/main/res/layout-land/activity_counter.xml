@@ -42,29 +42,34 @@
             android:padding="2dp">
 
             <ImageButton
-                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/color_transparent"
                 android:id="@+id/action_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:background="@color/color_transparent"
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
                 android:src="@drawable/sharp_remove_circle_outline_40"
-                android:layout_marginHorizontal="2dp"/>
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
             <ImageButton
-                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/color_transparent"
                 android:id="@+id/action_media"
-                android:src="@drawable/action_media_40"
-                android:layout_marginHorizontal="2dp"/>
-            <ImageButton
-                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
                 android:background="@color/color_transparent"
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
+                android:src="@drawable/action_media_40"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <ImageButton
                 android:id="@+id/action_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:background="@color/color_transparent"
+                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
                 android:src="@drawable/action_time_40"
-                android:layout_marginHorizontal="2dp"/>
+                tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -93,6 +98,7 @@
                 android:singleLine="true"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                tools:ignore="TextSizeCheck"
                 tools:text="Start Time" />
             <TextView
                 android:id="@+id/running_time"
@@ -144,12 +150,14 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_v1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name"
-            android:padding="2dp">
+            android:padding="2dp"
+            tools:ignore="UseCompoundDrawables">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/auto_icon"
-                android:layout_marginHorizontal="2dp"/>
+                android:layout_marginHorizontal="2dp"
+                tools:ignore="ContentDescription" />
             <TextView
                 android:layout_marginHorizontal="2dp"
                 android:layout_width="wrap_content"

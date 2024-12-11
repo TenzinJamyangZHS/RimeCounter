@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
         })
         mainBinding.tabLayout.setOnTabDoubleClickListener { tab ->
             when (tab.tag) {
-               HOME, ARCHIVE, LOCK, FAVOR -> {
+               HOME -> {
                     settingsViewModel.setIsListEnd(true)
                 }
             }

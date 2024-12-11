@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Type a counter name"
+                        android:text="@string/type_a_counter_name"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -104,7 +104,7 @@
                         android:maxLength="30"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Choose a counter color"
+                        android:text="@string/choose_a_counter_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -138,15 +138,17 @@
                             android:gravity="start|center"
                             android:checkedButton="@={editorViewModel.counterColorId}"
                             android:orientation="horizontal">
+
                             <RadioButton
-                                android:onClick="onCounterColorChanged"
                                 android:id="@+id/color_red"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
                                 android:button="@drawable/empty_bg"
                                 android:drawableStart="@drawable/color_72"
-                                app:drawableColorById="@{settingsViewModel.colorsMap}" />
+                                android:onClick="onCounterColorChanged"
+                                app:drawableColorById="@{settingsViewModel.colorsMap}"
+                                tools:ignore="DuplicateSpeakableTextCheck" />
 
                             <RadioButton
                                 android:onClick="onCounterColorChanged"
@@ -260,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Set counter current value"
+                        android:text="@string/set_counter_current_value"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -277,14 +279,14 @@
                         android:maxLength="9"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                     <TextView
                         android:layout_marginTop="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Set counter reset value"
+                        android:text="@string/set_counter_reset_value"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -301,14 +303,14 @@
                         android:maxLength="9"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                     <TextView
                         android:layout_marginTop="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Set counter increase value"
+                        android:text="@string/set_counter_increase_value"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -325,14 +327,14 @@
                         android:maxLength="4"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                     <TextView
                         android:layout_marginTop="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Set counter decrease value"
+                        android:text="@string/set_counter_decrease_value"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -349,14 +351,14 @@
                         android:maxLength="4"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                     <TextView
                         android:layout_marginTop="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Set counter auto in seconds"
+                        android:text="@string/set_counter_auto_in_seconds"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <EditText
@@ -373,7 +375,7 @@
                         android:maxLength="5"
                         android:minHeight="50dp"
                         android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                 </LinearLayout>
                 <LinearLayout
                     android:background="@drawable/layer1_bg"
@@ -390,7 +392,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="Choose a media file"
+                        android:text="@string/choose_a_media_file"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                     <LinearLayout
@@ -415,7 +417,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="4dp"
-                            android:text="Choose"
+                            android:text="@string/choose"
                             android:textAllCaps="false"
                             android:textStyle="bold" />
                     </LinearLayout>

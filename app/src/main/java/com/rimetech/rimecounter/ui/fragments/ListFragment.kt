@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.rimetech.rimecounter.R
 import com.rimetech.rimecounter.utils.ARCHIVED_LIST
+import com.rimetech.rimecounter.utils.HISTORY_LIST
 import com.rimetech.rimecounter.utils.HOME_LIST
 import com.rimetech.rimecounter.utils.LIKED_LIST
 import com.rimetech.rimecounter.utils.LOCKED_LIST
