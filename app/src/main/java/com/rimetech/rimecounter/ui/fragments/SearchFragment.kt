@@ -23,7 +23,7 @@ import com.rimetech.rimecounter.utils.setMargin
 import com.rimetech.rimecounter.utils.setPaintBackground
 import com.rimetech.rimecounter.viewmodels.ListCounterViewModel
 
-class SearchFragment: ListFragment() {
+class SearchFragment : ListFragment() {
     private var resultList = mutableListOf<Counter>()
     private val searchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     override fun onCreateView(
@@ -69,23 +69,26 @@ class SearchFragment: ListFragment() {
         searchBinding.blurView.setDragOnYAxis()
         settingsViewModel.isBlur.observe(requireActivity()) { blur ->
             settingsViewModel.isMonet.observe(requireActivity()) { monet ->
-                searchBinding.blurView.setPaintBackground(
-                    if (blur) 155 else 255,
-                    requireActivity().dpToPx(16f),
-                    ContextCompat.getColor(
-                        requireActivity(),
-                        if (monet) R.color.color_layer2_monet else R.color.color_layer2
+                if (isAdded) {
+                    searchBinding.blurView.setPaintBackground(
+                        if (blur) 155 else 255,
+                        requireActivity().dpToPx(16f),
+                        ContextCompat.getColor(
+                            requireActivity(),
+                            if (monet) R.color.color_layer2_monet else R.color.color_layer2
+                        )
                     )
-                )
-                if (blur) searchBinding.blurView.setBlur(
-                    requireActivity(),
-                    18f
-                ) else searchBinding.blurView.setBlurEnabled(false)
+                    if (blur) searchBinding.blurView.setBlur(
+                        requireActivity(),
+                        18f
+                    ) else searchBinding.blurView.setBlurEnabled(false)
+                }
+
             }
         }
     }
 
-    private fun setSearchView(){
+    private fun setSearchView() {
         searchBinding.searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -114,9 +117,9 @@ class SearchFragment: ListFragment() {
         })
     }
 
-    private fun setSearchResultList(list:MutableList<Counter>){
+    private fun setSearchResultList(list: MutableList<Counter>) {
         val resultList = list.filter { !it.isLocked && !it.isArchived }.toMutableList()
-        val searchAdapter = CounterListAdapter(resultList,listCounterViewModel)
-        searchBinding.recyclerview.adapter=searchAdapter
+        val searchAdapter = CounterListAdapter(resultList, listCounterViewModel)
+        searchBinding.recyclerview.adapter = searchAdapter
     }
 }
