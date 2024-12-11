@@ -24,4 +24,6 @@
     <string name="round_rectangle">Round Rectangle</string>
     <string name="null_shape">Null Shape</string>
     <string name="monet_need_android_12">Monet need Android 12+</string>
+    <string name="set_password">Set Password</string>
+    <string name="check_password">Check Password</string>
 </resources>

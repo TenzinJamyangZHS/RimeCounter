@@ -254,6 +254,27 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    private val _lockedPassword = MutableLiveData<String>()
+    val lockedPassword:MutableLiveData<String> get() = _lockedPassword
+    fun setLockedPassword(pass:String):String{
+        _lockedPassword.value=pass
+        return pass
+    }
+
+    private val _confirmPassword = MutableLiveData<String>()
+    val confirmPassword:MutableLiveData<String> get() = _confirmPassword
+    fun setConfirmPassword(pass:String):String{
+        _confirmPassword.value=pass
+        return pass
+    }
+
+    private val _originalPassword = MutableLiveData<String>()
+    val originalPassword:MutableLiveData<String> get() = _originalPassword
+    fun setOriginalPassword(pass:String):String{
+        _originalPassword.value=pass
+        return pass
+    }
+
 
 
 
