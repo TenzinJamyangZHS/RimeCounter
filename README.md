@@ -25,6 +25,10 @@ https://github.com/Dimezis/BlurView
 
   Auto count by seconds you set
 
+  Password protection for locked counters
+
+  Count history records
+
   Many other features...
 
 
