@@ -15,12 +15,17 @@ https://github.com/Dimezis/BlurView
 | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/006.png) | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/011.png) |
 
 
-##Features
-Auto size of Tablayout tabs with different screen width
-Auto hide and show Tablayout when need
-Many colorful beatiful themes also support light dark theme and monet theme which need Android 12+
-Auto count by seconds you set
-Many other features...
+
+## Features
+  Auto size of Tablayout tabs with different screen width
+  
+  Auto hide and show Tablayout when need
+  
+  Many colorful beatiful themes also support light dark theme and monet theme which need Android 12+
+
+  Auto count by seconds you set
+
+  Many other features...
 
 
 ## wip
