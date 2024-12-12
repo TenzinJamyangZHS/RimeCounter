@@ -57,7 +57,8 @@ class CounterActivity : AppCompatActivity() {
         getCounterId()
         RimeCounter.counterActivityList.add(counterId to this)
         settingsViewModel = (application as RimeCounter).settingsViewModel
-        settingsViewModel.addCounterTask(counterId, false)
+        settingsViewModel.addCounterTimeTask(counterId, false)
+        settingsViewModel.addCounterMediaTask(counterId, false)
         counterBinding.settingsViewModel = settingsViewModel
         counterBinding.counterViewModel = counterViewModel
         counterBinding.lifecycleOwner = this
@@ -67,6 +68,8 @@ class CounterActivity : AppCompatActivity() {
             updateTimeDifference(counter.startTime)
             updateRunningTime()
             setAutoCount()
+            setMediaCount()
+            setMediaButton(counter)
         }
         setMargin()
 
@@ -82,8 +85,10 @@ class CounterActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         RimeCounter.counterActivityList.remove(counterId to this)
-        settingsViewModel.updateTaskStats(counterId, false)
-        settingsViewModel.removeCounterTask(counterId)
+        settingsViewModel.updateTimeTaskStats(counterId, false)
+        settingsViewModel.updateMediaTaskStats(counterId, false)
+        settingsViewModel.removeCounterTimeTask(counterId)
+        settingsViewModel.removeCounterMediaTask(counterId)
     }
 
 
@@ -311,15 +316,39 @@ class CounterActivity : AppCompatActivity() {
             counterBinding.addShape.isEnabled = !auto
             counterBinding.actionMedia.isEnabled = !auto
             counterBinding.actionMinus.isEnabled = !auto
-            settingsViewModel.updateTaskStats(counterId, auto)
             onBackPressedCallback.isEnabled = auto
+            settingsViewModel.updateTimeTaskStats(counterId, auto)
             counterBinding.autoIcon.setImageResource(if (auto) R.drawable.action_time_24 else R.drawable.empty_bg)
             counterBinding.autoText.visibility = if (auto) View.VISIBLE else View.GONE
+
         }
         counterViewModel.currentTime.observe(this) { time ->
             counterBinding.autoText.text = " left $time seconds "
         }
     }
 
+    private fun setMediaCount(){
+        counterViewModel.counterMedia.observe(this){
+            media->
+            counterBinding.addShape.isEnabled = !media
+            counterBinding.actionTime.isEnabled = !media
+            counterBinding.actionMinus.isEnabled = !media
+            onBackPressedCallback.isEnabled = media
+            settingsViewModel.updateMediaTaskStats(counterId, media)
+            counterBinding.autoIcon.setImageResource(if (media) R.drawable.action_media_24 else R.drawable.empty_bg)
+
+        }
+    }
+
+    private fun setMediaButton(counter: Counter){
+        counterBinding.actionMedia.apply {
+            isEnabled = counter.autoMediaUri!=null
+            setOnClickListener {
+                counter.autoMediaUri?.let {
+                    counterViewModel.toggleMedia(counter,this@CounterActivity)
+                }
+            }
+        }
+    }
 
 }

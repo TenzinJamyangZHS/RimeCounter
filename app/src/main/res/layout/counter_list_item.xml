@@ -99,6 +99,14 @@
                 android:src="@drawable/action_time_24"
                 android:background="@color/color_transparent"
                 tools:ignore="ContentDescription" />
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/media_running_icon"
+                android:src="@drawable/action_media_24"
+                android:background="@color/color_transparent"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="0dp"

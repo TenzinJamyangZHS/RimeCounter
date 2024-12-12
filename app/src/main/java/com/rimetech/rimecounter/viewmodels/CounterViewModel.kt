@@ -1,5 +1,8 @@
 package com.rimetech.rimecounter.viewmodels
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -22,6 +25,9 @@ class CounterViewModel(id:UUID) : ViewModel() {
     private val _counterAuto = MutableLiveData(false)
     val counterAuto: LiveData<Boolean> get() = _counterAuto
 
+    private val _counterMedia = MutableLiveData(false)
+    val counterMedia: LiveData<Boolean> get() = _counterMedia
+
     private val _currentTime = MutableLiveData(0)
     val currentTime: LiveData<Int> get() = _currentTime
 
@@ -32,6 +38,15 @@ class CounterViewModel(id:UUID) : ViewModel() {
         _counterAuto.value = !_counterAuto.value!!
         if (_counterAuto.value == true) {
             startAuto(counter)
+        }
+    }
+
+    fun toggleMedia(counter: Counter,context: Context){
+        _counterMedia.value = !_counterMedia.value!!
+        if (_counterMedia.value==true){
+            counter.autoMediaUri?.let {uri->
+                startMedia(counter, uri,context)
+            }
         }
     }
 
@@ -50,6 +65,34 @@ class CounterViewModel(id:UUID) : ViewModel() {
                 }
             }
 
+        }
+    }
+
+    private fun startMedia(counter: Counter, audioUri: Uri, context: Context) {
+        viewModelScope.launch {
+            val mediaPlayer = MediaPlayer()
+            try {
+                mediaPlayer.setDataSource(context, audioUri)
+                mediaPlayer.prepare()
+
+                while (_counterMedia.value == true) {
+                    if (_counterMedia.value == true) {
+                        mediaPlayer.start()
+                        while (mediaPlayer.isPlaying && _counterMedia.value == true) {
+                            delay(100L)
+                        }
+                        if (_counterMedia.value == true) {
+                            counter.currentValue += counter.increaseValue
+                            updateCounter(counter)
+                        }
+                        mediaPlayer.seekTo(0)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                mediaPlayer.release()
+            }
         }
     }
 

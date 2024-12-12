@@ -176,7 +176,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="2dp"
                 android:background="@color/color_transparent"
-                android:onClick="@{(view) ->counterViewModel.onCounterActivityViewClicked(view,counter)}"
                 android:src="@drawable/action_media_40"
                 tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 

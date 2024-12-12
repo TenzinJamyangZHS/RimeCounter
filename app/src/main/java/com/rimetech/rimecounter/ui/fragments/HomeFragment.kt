@@ -41,6 +41,7 @@ class HomeFragment : ListFragment() {
         setTopDecoration(homeBinding.recyclerview)
         setListListener(homeBinding.recyclerview)
         setAddButton()
+//        autoMediaListener()
         return homeBinding.root
     }
 

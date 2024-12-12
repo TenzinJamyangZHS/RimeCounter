@@ -52,6 +52,7 @@ class CounterListAdapter(
                 itemValue.isSelected = true
                 itemValue.text = counter.currentValue.toString()
                 updateAutoIcon(counter)
+                updateMediaIcon(counter)
                 executePendingBindings()
             }
             holderBinding.listItemRoot.apply {
@@ -96,15 +97,30 @@ class CounterListAdapter(
 
         }
 
+
+
         private fun updateAutoIcon(counter: Counter) {
-            settingsViewModel.observeCounterTask(counter.id, fragmentActivity) { isRun ->
+            settingsViewModel.observeCounterTimeTask(counter.id, fragmentActivity) { isRun ->
                 if (isRun) {
                     holderBinding.autoRunningIcon.visibility=View.VISIBLE
                 } else {
                     holderBinding.autoRunningIcon.visibility=View.GONE
                 }
             }
+
         }
+
+        private fun updateMediaIcon(counter: Counter) {
+            settingsViewModel.observeCounterMediaTask(counter.id, fragmentActivity) { isMediaPlay ->
+                if (isMediaPlay) {
+                    holderBinding.mediaRunningIcon.visibility=View.VISIBLE
+                } else {
+                    holderBinding.mediaRunningIcon.visibility=View.GONE
+                }
+            }
+
+        }
+
 
     }
 

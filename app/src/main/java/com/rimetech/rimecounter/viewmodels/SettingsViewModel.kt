@@ -234,27 +234,59 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         R.id.theme_light to AppCompatDelegate.MODE_NIGHT_NO
     )
 
-    val counterTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
+    val counterTimeTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
 
-    fun addCounterTask (id:UUID, isRun:Boolean){
+    fun addCounterTimeTask (id:UUID, isRun:Boolean){
         val newLiveData = MutableLiveData(isRun)
-        counterTaskList.add(id to newLiveData)
+        counterTimeTaskList.add(id to newLiveData)
     }
 
-    fun removeCounterTask(id: UUID){
-        counterTaskList.removeIf { it.first==id }
+    fun removeCounterTimeTask(id: UUID){
+        counterTimeTaskList.removeIf { it.first==id }
     }
-    fun updateTaskStats(id: UUID,isRun:Boolean){
-        counterTaskList.find { it.first==id }?.second?.value=isRun
+    fun updateTimeTaskStats(id: UUID,isRun:Boolean){
+        counterTimeTaskList.find { it.first==id }?.second?.value=isRun
     }
 
-    fun observeCounterTask(id: UUID,lifecycleOwner: LifecycleOwner,observe: (Boolean)->Unit){
-        counterTaskList.find { it.first==id }?.second?.let {
+    fun observeCounterTimeTask(id: UUID,lifecycleOwner: LifecycleOwner,observe: (Boolean)->Unit){
+        counterTimeTaskList.find { it.first==id }?.second?.let {
             it.observe(lifecycleOwner){
                 value-> observe(value)
             }
         }
     }
+
+
+    val counterMediaTaskList = mutableListOf<Pair<UUID,MutableLiveData<Boolean>>>()
+
+    fun addCounterMediaTask (id:UUID, isRun:Boolean){
+        val newLiveData = MutableLiveData(isRun)
+        counterMediaTaskList.add(id to newLiveData)
+    }
+
+    fun removeCounterMediaTask(id: UUID){
+        counterMediaTaskList.removeIf { it.first==id }
+    }
+    fun updateMediaTaskStats(id: UUID,isRun:Boolean){
+        counterMediaTaskList.find { it.first==id }?.second?.value=isRun
+    }
+
+    fun observeCounterMediaTask(id: UUID,lifecycleOwner: LifecycleOwner,observe: (Boolean)->Unit){
+        counterMediaTaskList.find { it.first==id }?.second?.let {
+            it.observe(lifecycleOwner){
+                    value-> observe(value)
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     private val _lockedPassword = MutableLiveData<String>()
     val lockedPassword:MutableLiveData<String> get() = _lockedPassword
