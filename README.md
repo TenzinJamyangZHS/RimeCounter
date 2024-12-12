@@ -43,5 +43,6 @@ https://github.com/Dimezis/BlurView
 
 ## wip
 Auto count by play music feature will coming soon. --------------- Done
+
 Set a Target value which when it reached auto reset.
 
