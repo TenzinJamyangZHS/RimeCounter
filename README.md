@@ -5,6 +5,11 @@ Rime Counter is a simple counter app for android written in kotlin.
 ## Thanks
 https://github.com/Dimezis/BlurView
 
+## Update
+
+-20241212-13-25
+  update: Added auto count by playing a audio file
+
 ## Screenshots
 
 | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/001.png) | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/002.png) | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/003.png) | ![](https://github.com/TenzinJamyangZHS/RimeCounter/blob/main/screenshots/004.png) |
@@ -25,13 +30,18 @@ https://github.com/Dimezis/BlurView
 
   Auto count by seconds you set
 
+  Auto count by playing a audio file
+
   Password protection for locked counters
 
   Count history records
+
+  
 
   Many other features...
 
 
 ## wip
-Auto count by play music feature will coming soon.
+Auto count by play music feature will coming soon. --------------- Done
+Set a Target value which when it reached auto reset.
 
