@@ -43,4 +43,7 @@
     <string name="type_your_original_password_here">Type your original password here</string>
     <string name="no_locked_counter">No locked counter</string>
     <string name="counter_data">Counter Data</string>
+    <string name="set_target_value">Set target value</string>
+    <string name="set_circles">Set circles</string>
+    <string name="set_per_circle_seconds">Set per circle seconds</string>
 </resources>

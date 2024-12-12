@@ -7,7 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.HapticFeedbackConstants
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +49,7 @@ class CounterActivity : AppCompatActivity() {
     }
     private lateinit var settingsViewModel: SettingsViewModel
     private var runnable: Runnable? = null
+    private var runnable2: Runnable? = null
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +67,16 @@ class CounterActivity : AppCompatActivity() {
         counterBinding.lifecycleOwner = this
         counterViewModel.counterLiveData.observe(this) { counter ->
             counterBinding.counter = counter
+            counterViewModel.setIsTargetStarted(counter.isTargetStarted)
             setUI(counter)
             updateTimeDifference(counter.startTime)
             updateRunningTime()
             setAutoCount()
             setMediaCount()
             setMediaButton(counter)
+            setTargetView(counter)
+            setTargetButton(counter)
+            setTargetActon(counter)
         }
         setMargin()
 
@@ -327,9 +334,8 @@ class CounterActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMediaCount(){
-        counterViewModel.counterMedia.observe(this){
-            media->
+    private fun setMediaCount() {
+        counterViewModel.counterMedia.observe(this) { media ->
             counterBinding.addShape.isEnabled = !media
             counterBinding.actionTime.isEnabled = !media
             counterBinding.actionMinus.isEnabled = !media
@@ -340,15 +346,76 @@ class CounterActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMediaButton(counter: Counter){
+    private fun setMediaButton(counter: Counter) {
         counterBinding.actionMedia.apply {
-            isEnabled = counter.autoMediaUri!=null
+            isEnabled = counter.autoMediaUri != null
             setOnClickListener {
                 counter.autoMediaUri?.let {
-                    counterViewModel.toggleMedia(counter,this@CounterActivity)
+                    counterViewModel.toggleMedia(counter, this@CounterActivity)
                 }
             }
         }
     }
+
+    private fun setTargetButton(counter: Counter) {
+
+        counterBinding.targetIcon.apply {
+            setOnLongClickListener { view ->
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                if (counter.targetValue == null || counter.targetSeconds == null || counter.targetCircle == null) {
+                    Toast.makeText(this@CounterActivity, "Target not set!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    counter.isTargetStarted = !counter.isTargetStarted
+                    counter.targetStartDate = Date()
+                    counterViewModel.updateCounter(counter)
+                    recreate()
+                }
+
+                true
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setTargetActon(counter: Counter) {
+        counterViewModel.isTargetStarted.observe(this) { isStart ->
+            if (!isStart) {
+                counterBinding.targetValue.visibility = View.GONE
+                counterBinding.targetCircles.visibility = View.GONE
+                counterBinding.targetSeconds.visibility = View.GONE
+            } else {
+                counterBinding.targetValue.visibility = View.VISIBLE
+                counterBinding.targetCircles.visibility = View.VISIBLE
+                counterBinding.targetSeconds.visibility = View.VISIBLE
+                val leftCircles =
+                    counter.targetCircle!! - (Date().time - counter.targetStartDate!!.time) / (counter.targetSeconds!! * 1000)
+            }
+        }
+    }
+
+    private fun setTargetView(counter: Counter) {
+        if (!counter.isTargetStarted) {
+            counterBinding.targetValue.visibility = View.GONE
+            counterBinding.targetCircles.visibility = View.GONE
+            counterBinding.targetSeconds.visibility = View.GONE
+        } else {
+            counterBinding.targetValue.visibility = View.VISIBLE
+            counterBinding.targetCircles.visibility = View.VISIBLE
+            counterBinding.targetSeconds.visibility = View.VISIBLE
+        }
+        if (counter.isTargetStarted) {
+            counterBinding.targetIcon.setColorFilter(
+                ContextCompat.getColor(
+                    this@CounterActivity,
+                    colorToRColorList.find { it.first == counter.color }?.second
+                        ?: throw IllegalArgumentException("Counter color not found!")
+                )
+            )
+        } else {
+            counterBinding.targetIcon.clearColorFilter()
+        }
+    }
+
 
 }

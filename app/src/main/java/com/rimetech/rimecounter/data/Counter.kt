@@ -23,5 +23,11 @@ data class Counter(
     var isLocked:Boolean=false,
     var isArchived:Boolean=false,
     var autoMediaUri: Uri?,
-    var isRunning:Boolean=false
+    var isRunning:Boolean=false,
+    var targetValue: Int? = null,
+    var targetCircle: Int? = null,
+    var targetSeconds: Long? = null,
+    val targetList: MutableList<Boolean> = mutableListOf(),
+    var isTargetStarted: Boolean = false,
+    var targetStartDate: Date? = null
 )

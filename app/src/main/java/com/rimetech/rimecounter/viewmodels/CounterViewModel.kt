@@ -20,7 +20,7 @@ class CounterViewModel(id:UUID) : ViewModel() {
     private val counterRepository = CounterRepository.get()
     val counterLiveData = counterRepository.getCounter(id)
     lateinit var counter: Counter
-    private fun updateCounter(counter: Counter) = counterRepository.updateCounter(counter)
+    fun updateCounter(counter: Counter) = counterRepository.updateCounter(counter)
 
     private val _counterAuto = MutableLiveData(false)
     val counterAuto: LiveData<Boolean> get() = _counterAuto
@@ -96,7 +96,11 @@ class CounterViewModel(id:UUID) : ViewModel() {
         }
     }
 
-
+    private val _isTargetStarted = MutableLiveData<Boolean>()
+    val isTargetStarted : LiveData<Boolean> get() = _isTargetStarted
+    fun setIsTargetStarted(start:Boolean){
+        _isTargetStarted.value=start
+    }
 
 
 

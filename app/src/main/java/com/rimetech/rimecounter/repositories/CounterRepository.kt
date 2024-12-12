@@ -3,6 +3,8 @@ package com.rimetech.rimecounter.repositories
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rimetech.rimecounter.data.Counter
 import com.rimetech.rimecounter.database.CounterDatabase
 import java.util.UUID
@@ -22,8 +24,23 @@ class CounterRepository private constructor(context: Context){
         }
     }
 
+
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE Counter ADD COLUMN targetValue INTEGER")
+            db.execSQL("ALTER TABLE Counter ADD COLUMN targetCircle INTEGER")
+            db.execSQL("ALTER TABLE Counter ADD COLUMN targetSeconds INTEGER")
+            db.execSQL("ALTER TABLE Counter ADD COLUMN isTargetStarted INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE Counter ADD COLUMN targetStartDate INTEGER")
+            db.execSQL(
+                "ALTER TABLE Counter ADD COLUMN targetList TEXT NOT NULL DEFAULT ''"
+            )
+        }
+    }
+
+
     private val counterDatabase = Room.databaseBuilder(context.applicationContext, CounterDatabase::class.java,
-        COUNTER_DATABASE).build()
+        COUNTER_DATABASE).addMigrations(MIGRATION_1_2).build()
     private val counterDao = counterDatabase.counterDao()
     private val executor = Executors.newSingleThreadExecutor()
 

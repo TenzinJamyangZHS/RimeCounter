@@ -1,6 +1,7 @@
 package com.rimetech.rimecounter.database
 
 import android.net.Uri
+import android.util.Log
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
@@ -51,5 +52,24 @@ class CounterTypeConverters {
     fun toList(value: String?): MutableList<Pair<Pair<Date, Date>, Int>>? {
         val listType = object : TypeToken<MutableList<Pair<Pair<Date, Date>, Int>>>() {}.type
         return gson.fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromTargetList(targetList: MutableList<Boolean>): String {
+        return Gson().toJson(targetList)
+    }
+
+    @TypeConverter
+    fun toTargetList(json: String?): MutableList<Boolean> {
+        if (json.isNullOrEmpty()) {
+            return mutableListOf()
+        }
+        return try {
+            val type = object : TypeToken<MutableList<Boolean>>() {}.type
+            Gson().fromJson(json, type) ?: mutableListOf()
+        } catch (e: Exception) {
+            Log.e("CounterTypeConverters", "Failed to parse JSON: $json", e)
+            mutableListOf()
+        }
     }
 }
