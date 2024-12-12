@@ -96,13 +96,6 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
         return text
     }
 
-    private val _targetCircles = MutableLiveData<String>()
-    val targetCircles:MutableLiveData<String> get() = _targetCircles
-    fun setTargetCircles(text: String):String{
-        _targetCircles.value=text
-        return text
-    }
-
     private val _perCircleSeconds = MutableLiveData<String>()
     val perCircleSeconds:MutableLiveData<String> get() = _perCircleSeconds
     fun setPerCircleSeconds(text: String):String{

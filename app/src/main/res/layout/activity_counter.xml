@@ -223,7 +223,6 @@
                 android:layout_marginHorizontal="2dp"/>
             <TextView
                 android:visibility="gone"
-                android:text="@{String.valueOf(counter.targetCircle)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/target_circles"

@@ -31,6 +31,9 @@ class CounterViewModel(id:UUID) : ViewModel() {
     private val _currentTime = MutableLiveData(0)
     val currentTime: LiveData<Int> get() = _currentTime
 
+    private val _leftSeconds = MutableLiveData(0L)
+    val leftSeconds: LiveData<Long> get() = _leftSeconds
+
     private val _currentValue = MutableLiveData(0)
     val currentValue: LiveData<Int> get() = _currentValue
 
@@ -68,6 +71,21 @@ class CounterViewModel(id:UUID) : ViewModel() {
         }
     }
 
+    fun startTarget(counter: Counter,onFinished: () -> Unit){
+        viewModelScope.launch {
+            counter.targetSeconds?.let {
+                seconds->
+                var temp = seconds
+                while (temp>=0){
+                    _leftSeconds.value=temp
+                    temp--
+                    delay(1000L)
+                }
+                onFinished()
+            }
+        }
+    }
+
     private fun startMedia(counter: Counter, audioUri: Uri, context: Context) {
         viewModelScope.launch {
             val mediaPlayer = MediaPlayer()
@@ -100,6 +118,12 @@ class CounterViewModel(id:UUID) : ViewModel() {
     val isTargetStarted : LiveData<Boolean> get() = _isTargetStarted
     fun setIsTargetStarted(start:Boolean){
         _isTargetStarted.value=start
+    }
+
+    private val _targetSeconds = MutableLiveData<Long>()
+    val targetSeconds:LiveData<Long> get() = _targetSeconds
+    fun setTargetSeconds(seconds:Long){
+        _targetSeconds.value=seconds
     }
 
 

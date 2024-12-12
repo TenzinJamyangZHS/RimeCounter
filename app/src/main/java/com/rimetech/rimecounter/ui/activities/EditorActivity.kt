@@ -143,7 +143,6 @@ class EditorActivity : AppCompatActivity() {
                 editorViewModel.setDecreaseValue(counter.decreaseValue.toString())
                 editorViewModel.setAutoLength(counter.autoInSecond.toString())
                 editorViewModel.setTargetValue(counter.targetValue.toString())
-                editorViewModel.setTargetCircles(counter.targetCircle.toString())
                 editorViewModel.setPerCircleSeconds(counter.targetSeconds.toString())
                 counter.autoMediaUri?.let { uri ->
                     editorViewModel.setMediaUri(uri)
@@ -194,7 +193,6 @@ class EditorActivity : AppCompatActivity() {
                 autoInSecond = editorViewModel.autoLength.value?.toIntOrNull() ?: 3,
                 autoMediaUri = editorViewModel.mediaUri.value,
                 targetValue = editorViewModel.targetValue.value?.toInt(),
-                targetCircle = editorViewModel.targetCircles.value?.toInt(),
                 targetSeconds = editorViewModel.perCircleSeconds.value?.toLong()
             )
             listCounterViewModel.addCounter(newCounter)
@@ -212,7 +210,6 @@ class EditorActivity : AppCompatActivity() {
                         autoInSecond = editorViewModel.autoLength.value?.toIntOrNull() ?: 3
                         autoMediaUri = editorViewModel.mediaUri.value
                         targetValue = editorViewModel.targetValue.value?.toInt()
-                        targetCircle = editorViewModel.targetCircles.value?.toInt()
                         targetSeconds = editorViewModel.perCircleSeconds.value?.toLong()
                     }
                     listCounterViewModel.updateCounter(counter)

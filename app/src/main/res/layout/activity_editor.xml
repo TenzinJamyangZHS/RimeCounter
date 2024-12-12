@@ -463,30 +463,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:paddingHorizontal="20dp"
-                        android:text="@string/set_circles"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <EditText
-                        android:text="@={editorViewModel.targetCircles}"
-                        android:layout_marginBottom="6dp"
-                        android:id="@+id/circles_edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:autofillHints="counter name"
-                        android:background="@color/color_transparent"
-                        android:gravity="start|center"
-                        android:inputType="number"
-                        android:maxLength="9"
-                        android:minHeight="50dp"
-                        android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
-                    <TextView
-                        android:layout_marginTop="2dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:paddingHorizontal="20dp"
                         android:text="@string/set_per_circle_seconds"
                         android:textSize="16sp"
                         android:textStyle="bold" />

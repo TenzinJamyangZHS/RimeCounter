@@ -34,6 +34,7 @@ import com.rimetech.rimecounter.utils.setPaintBackground
 import com.rimetech.rimecounter.viewmodels.CounterViewModel
 import com.rimetech.rimecounter.viewmodels.CounterViewModelFactory
 import com.rimetech.rimecounter.viewmodels.SettingsViewModel
+import kotlinx.coroutines.Job
 import java.util.Date
 import java.util.UUID
 
@@ -49,7 +50,7 @@ class CounterActivity : AppCompatActivity() {
     }
     private lateinit var settingsViewModel: SettingsViewModel
     private var runnable: Runnable? = null
-    private var runnable2: Runnable? = null
+    private var targetJob: Job? = null
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +97,10 @@ class CounterActivity : AppCompatActivity() {
         settingsViewModel.updateMediaTaskStats(counterId, false)
         settingsViewModel.removeCounterTimeTask(counterId)
         settingsViewModel.removeCounterMediaTask(counterId)
+        runnable?.let {
+            handler.removeCallbacks(it)
+            runnable = null
+        }
     }
 
 
@@ -362,13 +367,21 @@ class CounterActivity : AppCompatActivity() {
         counterBinding.targetIcon.apply {
             setOnLongClickListener { view ->
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                if (counter.targetValue == null || counter.targetSeconds == null || counter.targetCircle == null) {
+                if (counter.targetValue == null && counter.targetSeconds == null) {
                     Toast.makeText(this@CounterActivity, "Target not set!", Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     counter.isTargetStarted = !counter.isTargetStarted
                     counter.targetStartDate = Date()
+                    counter.currentValue = 0
                     counterViewModel.updateCounter(counter)
+                    counterViewModel.setTargetSeconds(counter.targetSeconds!!)
+                    counterViewModel.startTarget(counter){
+                        counterViewModel.setIsTargetStarted(false)
+                        counter.isTargetStarted=false
+                        counterViewModel.updateCounter(counter)
+                        Toast.makeText(this@CounterActivity,"End",Toast.LENGTH_SHORT).show()
+                    }
                     recreate()
                 }
 
@@ -382,28 +395,30 @@ class CounterActivity : AppCompatActivity() {
         counterViewModel.isTargetStarted.observe(this) { isStart ->
             if (!isStart) {
                 counterBinding.targetValue.visibility = View.GONE
-                counterBinding.targetCircles.visibility = View.GONE
                 counterBinding.targetSeconds.visibility = View.GONE
             } else {
                 counterBinding.targetValue.visibility = View.VISIBLE
-                counterBinding.targetCircles.visibility = View.VISIBLE
                 counterBinding.targetSeconds.visibility = View.VISIBLE
-                val leftCircles =
-                    counter.targetCircle!! - (Date().time - counter.targetStartDate!!.time) / (counter.targetSeconds!! * 1000)
+                counterViewModel.leftSeconds.observe(this) { seconds ->
+                    if (counter.currentValue == counter.targetValue || seconds < 0) {
+                        counterViewModel.setIsTargetStarted(false)
+                        counter.currentValue = 0
+                        counter.isTargetStarted = false
+                        counter.targetStartDate = null
+                        targetJob?.cancel()
+                        targetJob = null
+                        counterViewModel.updateCounter(counter)
+                    } else {
+                        counterBinding.targetSeconds.text = "$seconds remain"
+                    }
+                }
+
             }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setTargetView(counter: Counter) {
-        if (!counter.isTargetStarted) {
-            counterBinding.targetValue.visibility = View.GONE
-            counterBinding.targetCircles.visibility = View.GONE
-            counterBinding.targetSeconds.visibility = View.GONE
-        } else {
-            counterBinding.targetValue.visibility = View.VISIBLE
-            counterBinding.targetCircles.visibility = View.VISIBLE
-            counterBinding.targetSeconds.visibility = View.VISIBLE
-        }
         if (counter.isTargetStarted) {
             counterBinding.targetIcon.setColorFilter(
                 ContextCompat.getColor(
@@ -415,7 +430,7 @@ class CounterActivity : AppCompatActivity() {
         } else {
             counterBinding.targetIcon.clearColorFilter()
         }
-    }
 
+    }
 
 }
