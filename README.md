@@ -12,12 +12,7 @@ https://github.com/Dimezis/BlurView
   update: 
   
     Added auto count by playing a audio file
-
--20241213-07-58
- 
-  update:
-
-    Users can now set a target value and a time limit. If either the target value is reached or the time limit expires, the current value will automatically reset.
+    
 
 ## Screenshots
 
