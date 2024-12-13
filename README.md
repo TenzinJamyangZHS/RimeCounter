@@ -41,8 +41,6 @@ https://github.com/Dimezis/BlurView
 
   Auto count by playing a audio file
 
-  Users can now set a target value and a time limit. If either the target value is reached or the time limit expires, the current value will automatically reset.
-
   Password protection for locked counters
 
   Count history records
@@ -52,8 +50,4 @@ https://github.com/Dimezis/BlurView
   Many other features...
 
 
-## wip
-Auto count by play music feature will coming soon. --------------- Done
-
-Set a Target value which when it reached auto reset. --------------- Done
 
