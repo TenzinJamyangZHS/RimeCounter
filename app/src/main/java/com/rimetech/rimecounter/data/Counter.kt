@@ -23,9 +23,4 @@ data class Counter(
     var isLocked:Boolean=false,
     var isArchived:Boolean=false,
     var autoMediaUri: Uri?,
-    var isRunning:Boolean=false,
-    var targetValue: Int? = null,
-    var targetSeconds: Long? = null,
-    var isTargetStarted: Boolean = false,
-    var targetStartDate: Date? = null
-)
+    )

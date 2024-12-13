@@ -10,6 +10,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -94,6 +95,11 @@ const val ARCHIVED_LIST = 2
 const val LOCKED_LIST = 3
 const val HISTORY_LIST = 4
 
+const val ACTION_MINUS = "action-minus"
+const val ACTION_MEDIA = "action-media"
+const val ACTION_TIME = "action-time"
+const val ACTION_TARGET = "action-target"
+
 
 val tabNameList = mutableListOf(HOME, SEARCH, FAVOR, HISTORY, SETTINGS, ARCHIVE, LOCK)
 
@@ -161,6 +167,12 @@ val colorToRIdList = mutableListOf(
     COLOR_ORANGE to R.id.color_orange,
     COLOR_BROWN to R.id.color_brown,
     COLOR_TEAL to R.id.color_teal
+)
+
+val actionList = mutableListOf(
+    ACTION_MINUS to R.id.action_minus,
+    ACTION_TIME to R.id.action_time,
+    ACTION_MEDIA to R.id.action_media
 )
 
 fun Context.dpToPx(dp: Float): Float {
@@ -345,7 +357,6 @@ fun RecyclerView.removeSpecificItemDecoration(decorationClass: Class<out Recycle
 }
 
 fun View.setDragOnYAxis() {
-    // 记录视图的初始位置
     var initialY = 0f
     var initialTouchY = 0f
     var isDragging = false
@@ -527,5 +538,97 @@ fun setRadioButtonDrawableColorById(radioButton: RadioButton, idToColorMap: Map<
         }
     }
 }
+
+fun View.setDragOnXYAxis() {
+    var initialX = 0f
+    var initialY = 0f
+    var initialTouchX = 0f
+    var initialTouchY = 0f
+    var isDragging = false
+
+    this.setOnTouchListener { v, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                initialTouchX = event.rawX
+                initialTouchY = event.rawY
+                initialX = v.x
+                initialY = v.y
+                isDragging = false
+                true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.rawX - initialTouchX
+                val dy = event.rawY - initialTouchY
+
+                if (!isDragging && (abs(dx) > 10 || abs(dy) > 10)) {
+                    isDragging = true
+                }
+
+                if (isDragging) {
+                    v.x = initialX + dx
+                    v.y = initialY + dy
+                }
+                true
+            }
+
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                if (!isDragging) {
+                    v.performClick()
+                }
+                true
+            }
+
+            else -> false
+        }
+    }
+}
+
+
+fun View.setDragOnXYAxisLimit() {
+    var initialX = 0f
+    var initialY = 0f
+    var initialTouchX = 0f
+    var initialTouchY = 0f
+    var isDragging = false
+
+    this.setOnTouchListener { v, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                initialTouchX = event.rawX
+                initialTouchY = event.rawY
+                initialX = v.x
+                initialY = v.y
+                isDragging = false
+                true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.rawX - initialTouchX
+                val dy = event.rawY - initialTouchY
+                if (!isDragging && (abs(dx) > 10 || abs(dy) > 10)) {
+                    isDragging = true
+                }
+                if (isDragging) {
+                    val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+                    val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+                    val newX = (initialX + dx).coerceIn(0f, (screenWidth - v.width).toFloat())
+                    val newY = (initialY + dy).coerceIn(0f, (screenHeight - v.height).toFloat())
+                    v.x = newX
+                    v.y = newY
+                }
+                true
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                if (!isDragging) {
+                    v.performClick()
+                }
+                true
+            }
+            else -> false
+        }
+    }
+}
+
+
 
 

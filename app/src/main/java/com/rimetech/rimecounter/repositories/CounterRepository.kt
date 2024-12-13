@@ -88,8 +88,56 @@ class CounterRepository private constructor(context: Context){
     }
 
 
+
+
+    private val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                """
+            CREATE TABLE new_Counter (
+                id TEXT NOT NULL PRIMARY KEY,
+                name TEXT NOT NULL,
+                currentValue INTEGER NOT NULL,
+                resetValue INTEGER NOT NULL,
+                increaseValue INTEGER NOT NULL,
+                decreaseValue INTEGER NOT NULL,
+                color TEXT NOT NULL,
+                autoInSecond INTEGER NOT NULL,
+                startTime INTEGER NOT NULL,
+                usageList TEXT NOT NULL,
+                isFavored INTEGER NOT NULL,
+                isLocked INTEGER NOT NULL,
+                isArchived INTEGER NOT NULL,
+                autoMediaUri TEXT
+            )
+            """.trimIndent()
+            )
+
+            db.execSQL(
+                """
+            INSERT INTO new_Counter (
+                id, name, currentValue, resetValue, increaseValue, decreaseValue, color,
+                autoInSecond, startTime, usageList, isFavored, isLocked, isArchived,
+                autoMediaUri
+            )
+            SELECT 
+                id, name, currentValue, resetValue, increaseValue, decreaseValue, color,
+                autoInSecond, startTime, usageList, isFavored, isLocked, isArchived,
+                autoMediaUri
+            FROM Counter
+            """.trimIndent()
+            )
+
+            db.execSQL("DROP TABLE Counter")
+
+            db.execSQL("ALTER TABLE new_Counter RENAME TO Counter")
+        }
+    }
+
+
+
     private val counterDatabase = Room.databaseBuilder(context.applicationContext, CounterDatabase::class.java,
-        COUNTER_DATABASE).addMigrations(MIGRATION_1_2,MIGRATION_2_3).build()
+        COUNTER_DATABASE).addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4).build()
     private val counterDao = counterDatabase.counterDao()
     private val executor = Executors.newSingleThreadExecutor()
 

@@ -53,7 +53,6 @@ class CounterListAdapter(
                 itemValue.text = counter.currentValue.toString()
                 updateAutoIcon(counter)
                 updateMediaIcon(counter)
-                updateTargetIcon(counter)
                 executePendingBindings()
             }
             holderBinding.listItemRoot.apply {
@@ -120,10 +119,6 @@ class CounterListAdapter(
                 }
             }
 
-        }
-
-        private fun updateTargetIcon(counter: Counter){
-            holderBinding.targetIcon.visibility = if (counter.isTargetStarted) View.VISIBLE else View.GONE
         }
 
 

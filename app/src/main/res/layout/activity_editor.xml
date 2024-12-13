@@ -423,67 +423,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:background="@drawable/layer1_bg"
-                    android:id="@+id/target_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:elevation="4dp"
-                    android:gravity="top|center"
-                    android:orientation="vertical"
-                    android:paddingVertical="8dp">
-                    <TextView
-                        android:layout_marginTop="2dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:paddingHorizontal="20dp"
-                        android:text="@string/set_target_value"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <EditText
-                        android:text="@={editorViewModel.targetValue}"
-                        android:layout_marginBottom="6dp"
-                        android:id="@+id/target_value_edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:autofillHints="counter name"
-                        android:background="@color/color_transparent"
-                        android:gravity="start|center"
-                        android:inputType="number"
-                        android:maxLength="9"
-                        android:minHeight="50dp"
-                        android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
-                    <TextView
-                        android:layout_marginTop="2dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:paddingHorizontal="20dp"
-                        android:text="@string/set_per_circle_seconds"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <EditText
-                        android:text="@={editorViewModel.perCircleSeconds}"
-                        android:layout_marginBottom="6dp"
-                        android:id="@+id/per_circle_seconds"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:autofillHints="counter name"
-                        android:background="@color/color_transparent"
-                        android:gravity="start|center"
-                        android:inputType="number|numberSigned"
-                        android:maxLength="9"
-                        android:minHeight="50dp"
-                        android:paddingHorizontal="12dp"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
-
-                </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
 

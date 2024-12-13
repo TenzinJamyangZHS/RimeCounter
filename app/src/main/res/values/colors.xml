@@ -48,5 +48,7 @@
     <color name="shape_font_color">#FAFAFA</color>
     <color name="no_shape_font_color">#263238</color>
 
+    <color name="counter_action_bg">#4DFAFAFA</color>
+
 
 </resources>

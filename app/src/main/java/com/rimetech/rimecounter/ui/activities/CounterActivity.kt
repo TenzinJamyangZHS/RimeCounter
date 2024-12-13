@@ -29,6 +29,8 @@ import com.rimetech.rimecounter.utils.getFormattedDate
 import com.rimetech.rimecounter.utils.getNavigationBarHeight
 import com.rimetech.rimecounter.utils.getStatusBarHeight
 import com.rimetech.rimecounter.utils.getTimeDifferenceInSeconds
+import com.rimetech.rimecounter.utils.setBlur
+import com.rimetech.rimecounter.utils.setDragOnXYAxisLimit
 import com.rimetech.rimecounter.utils.setMargin
 import com.rimetech.rimecounter.utils.setPaintBackground
 import com.rimetech.rimecounter.viewmodels.CounterViewModel
@@ -49,7 +51,6 @@ class CounterActivity : AppCompatActivity() {
     }
     private lateinit var settingsViewModel: SettingsViewModel
     private var runnable: Runnable? = null
-    private var runnable2: Runnable? = null
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,27 +71,12 @@ class CounterActivity : AppCompatActivity() {
             setUI(counter)
             updateTimeDifference(counter.startTime)
             updateRunningTime()
-            setAutoCount()
-            setMediaCount()
-            setMediaButton(counter)
-            setTargetView(counter)
-            setTargetButton(counter)
-            counter.targetValue?.let { target->
-                if (counter.isTargetStarted){
-                    updateLeftTargetSeconds(counter)
-                    runnable2?.let {
-                        handler.post(it)
-                    }
-                } else {
-                    runnable2?.let {
-                        handler.removeCallbacks(it)
-                        runnable2=null
-                    }
-                }
-            }
-
+            setMediaCount(counter)
+            setAutoCount(counter)
+            setMediaAndTimeButton(counter)
         }
         setMargin()
+        setBlurView()
 
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -114,12 +100,26 @@ class CounterActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setMargin() {
         counterBinding.timeLayout.setMargin(getStatusBarHeight(this), POS_TOP)
-        counterBinding.actionLayout.setMargin(getNavigationBarHeight(this), POS_BOTTOM)
+        counterBinding.blurView.setMargin(getNavigationBarHeight(this), POS_BOTTOM)
     }
 
+    private fun setBlurView() {
+        settingsViewModel.isBlur.observe(this) { blur ->
+            counterBinding.blurView.apply {
+                setPaintBackground(
+                    if (blur) 155 else 255,
+                    this@CounterActivity.dpToPx(8f),
+                    ContextCompat.getColor(this@CounterActivity, R.color.counter_action_bg)
+                )
+                if (blur) setBlur(this@CounterActivity, 18f) else setBlurEnabled(false)
+            }
+        }
+        counterBinding.dragIcon.isClickable =false
+        counterBinding.blurView.setDragOnXYAxisLimit()
+        counterBinding.addShape.setDragOnXYAxisLimit()
+    }
 
     private fun getCounterId() {
         counterId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -259,12 +259,7 @@ class CounterActivity : AppCompatActivity() {
                 R.color.black
             )
         )
-        counterBinding.actionLayout.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                R.color.black
-            )
-        )
+
         counterBinding.startTime.setTextColor(
             ContextCompat.getColor(
                 this,
@@ -334,109 +329,69 @@ class CounterActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setAutoCount() {
+    private fun setAutoCount(counter: Counter) {
         counterViewModel.counterAuto.observe(this) { auto ->
             counterBinding.addShape.isEnabled = !auto
             counterBinding.actionMedia.isEnabled = !auto
             counterBinding.actionMinus.isEnabled = !auto
             onBackPressedCallback.isEnabled = auto
             settingsViewModel.updateTimeTaskStats(counterId, auto)
-            counterBinding.autoIcon.setImageResource(if (auto) R.drawable.action_time_24 else R.drawable.empty_bg)
+            if (auto){
+                counterBinding.autoIcon.setImageResource(R.drawable.action_time_24)
+                counterBinding.autoIcon.setColorFilter(ContextCompat.getColor(this,
+                    colorToRColorList.find { it.first==counter.color }?.second?:throw IllegalArgumentException("Counter color not found")))
+            } else {
+                counterBinding.autoIcon.setImageResource(R.drawable.empty_bg)
+                counterBinding.autoIcon.clearColorFilter()
+            }
             counterBinding.autoText.visibility = if (auto) View.VISIBLE else View.GONE
-
         }
         counterViewModel.currentTime.observe(this) { time ->
             counterBinding.autoText.text = " left $time seconds "
         }
     }
 
-    private fun setMediaCount() {
+    private fun setMediaCount(counter: Counter) {
         counterViewModel.counterMedia.observe(this) { media ->
             counterBinding.addShape.isEnabled = !media
             counterBinding.actionTime.isEnabled = !media
             counterBinding.actionMinus.isEnabled = !media
             onBackPressedCallback.isEnabled = media
             settingsViewModel.updateMediaTaskStats(counterId, media)
-            counterBinding.autoIcon.setImageResource(if (media) R.drawable.action_media_24 else R.drawable.empty_bg)
-
-        }
-    }
-
-    private fun setMediaButton(counter: Counter) {
-        counterBinding.actionMedia.apply {
-            isEnabled = counter.autoMediaUri != null
-            setOnClickListener {
-                counter.autoMediaUri?.let {
-                    counterViewModel.toggleMedia(counter, this@CounterActivity)
-                }
+            if (media){
+                counterBinding.mediaIcon.setImageResource(R.drawable.action_media_24)
+                counterBinding.mediaIcon.setColorFilter(ContextCompat.getColor(this,
+                    colorToRColorList.find { it.first==counter.color }?.second?:throw IllegalArgumentException("Counter color not found")))
+            } else {
+                counterBinding.mediaIcon.setImageResource(R.drawable.empty_bg)
+                counterBinding.mediaIcon.clearColorFilter()
             }
+
         }
     }
 
-    private fun setTargetButton(counter: Counter) {
-
-        counterBinding.targetIcon.apply {
+    private fun setMediaAndTimeButton(counter: Counter) {
+        counterBinding.actionMedia.apply {
             setOnLongClickListener { view ->
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                if (counter.targetValue == null && counter.targetSeconds == null) {
-                    Toast.makeText(this@CounterActivity, "Target not set!", Toast.LENGTH_SHORT)
-                        .show()
+                if (counter.autoMediaUri != null) {
+                    counter.autoMediaUri?.let {
+                        counterViewModel.toggleMedia(counter, this@CounterActivity)
+                    }
                 } else {
-                    counter.isTargetStarted = !counter.isTargetStarted
-                    counter.targetStartDate = Date()
-                    counter.currentValue = 0
-                    counterViewModel.updateCounter(counter)
+                    Toast.makeText(this@CounterActivity, "No media file!", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 true
             }
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setTargetView(counter: Counter) {
-        if (counter.isTargetStarted) {
-            counterBinding.targetIcon.setColorFilter(
-                ContextCompat.getColor(
-                    this@CounterActivity,
-                    colorToRColorList.find { it.first == counter.color }?.second
-                        ?: throw IllegalArgumentException("Counter color not found!")
-                )
-            )
-
-            counterBinding.targetValue.visibility = View.VISIBLE
-            counterBinding.targetSeconds.visibility = View.VISIBLE
-        } else {
-            counterBinding.targetIcon.clearColorFilter()
-            counterBinding.targetValue.visibility = View.GONE
-            counterBinding.targetSeconds.visibility = View.GONE
-        }
-    }
-
-    private fun updateLeftTargetSeconds(counter: Counter) {
-        runnable2?.let { handler.removeCallbacks(it) }
-
-        runnable2 = object : Runnable {
-            override fun run() {
-                counter.targetStartDate?.let { startDate->
-                    counter.targetSeconds?.let { targetSeconds->
-                        val timeToUse = startDate.time+targetSeconds*1000
-                        if (Date().time>timeToUse || counter.currentValue>counter.targetValue!!){
-                            if (counter.isTargetStarted) {
-                                counter.isTargetStarted=false
-                                counter.currentValue=0
-                                counterViewModel.updateCounter(counter)
-                            }
-                        }  else {
-                            val formattedDuration = formatDuration((timeToUse-Date().time)/1000)
-                            counterBinding.targetSeconds.text = formattedDuration
-                        }
-                    }
-                }
-
-                handler.postDelayed(this, 1000)
+        counterBinding.actionTime.apply {
+            setOnLongClickListener { view->
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                counterViewModel.toggleAuto(counter)
+                true
             }
         }
-        handler.post(runnable2!!)
     }
 
 }

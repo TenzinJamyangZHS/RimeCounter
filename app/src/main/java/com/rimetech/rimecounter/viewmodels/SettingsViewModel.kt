@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.rimetech.rimecounter.R
+import com.rimetech.rimecounter.utils.ACTION_MINUS
 import com.rimetech.rimecounter.utils.BG_AMOLED
 import com.rimetech.rimecounter.utils.BG_FROM_COUNTER
 import com.rimetech.rimecounter.utils.BG_NORMAL
@@ -32,6 +33,7 @@ import com.rimetech.rimecounter.utils.SHAPE_ROUND
 import com.rimetech.rimecounter.utils.THEME_DARK
 import com.rimetech.rimecounter.utils.THEME_LIGHT
 import com.rimetech.rimecounter.utils.THEME_SYSTEM
+import com.rimetech.rimecounter.utils.actionList
 import com.rimetech.rimecounter.utils.tabNameList
 import java.util.UUID
 
@@ -280,14 +282,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-
-
-
-
-
-
-
-
     private val _lockedPassword = MutableLiveData<String>()
     val lockedPassword:MutableLiveData<String> get() = _lockedPassword
     fun setLockedPassword(pass:String):String{
@@ -309,6 +303,17 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         return pass
     }
 
+    private val _defaultAction = MutableLiveData<Int>()
+    val defaultAction:LiveData<Int> get() = _defaultAction
+    fun setDefaultAction(action:Int){
+        _defaultAction.value=action
+        editor.putString("default_action", actionList.find { it.second==action}?.first).apply()
+    }
+
+    private fun initDefaultAction(){
+        _defaultAction.value= actionList.find { it.first == sharedPreferences.getString("default-action", ACTION_MINUS)}?.second
+    }
+
 
 
 
@@ -324,5 +329,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         setTabSize()
         setScreenWidth()
         setListWidth()
+        initDefaultAction()
     }
 }

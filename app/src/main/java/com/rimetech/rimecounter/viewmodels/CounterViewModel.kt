@@ -20,7 +20,7 @@ class CounterViewModel(id:UUID) : ViewModel() {
     private val counterRepository = CounterRepository.get()
     val counterLiveData = counterRepository.getCounter(id)
     lateinit var counter: Counter
-    fun updateCounter(counter: Counter) = counterRepository.updateCounter(counter)
+    private fun updateCounter(counter: Counter) = counterRepository.updateCounter(counter)
 
     private val _counterAuto = MutableLiveData(false)
     val counterAuto: LiveData<Boolean> get() = _counterAuto
@@ -34,7 +34,7 @@ class CounterViewModel(id:UUID) : ViewModel() {
     private val _currentValue = MutableLiveData(0)
     val currentValue: LiveData<Int> get() = _currentValue
 
-    private fun toggleAuto(counter: Counter) {
+    fun toggleAuto(counter: Counter) {
         _counterAuto.value = !_counterAuto.value!!
         if (_counterAuto.value == true) {
             startAuto(counter)
@@ -107,10 +107,6 @@ class CounterViewModel(id:UUID) : ViewModel() {
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 counter.currentValue -= counter.decreaseValue
                 updateCounter(counter)
-            }
-            R.id.action_time->{
-                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                toggleAuto(counter)
             }
         }
     }

@@ -142,8 +142,6 @@ class EditorActivity : AppCompatActivity() {
                 editorViewModel.setIncreaseValue(counter.increaseValue.toString())
                 editorViewModel.setDecreaseValue(counter.decreaseValue.toString())
                 editorViewModel.setAutoLength(counter.autoInSecond.toString())
-                editorViewModel.setTargetValue(counter.targetValue.toString())
-                editorViewModel.setPerCircleSeconds(counter.targetSeconds.toString())
                 counter.autoMediaUri?.let { uri ->
                     editorViewModel.setMediaUri(uri)
                     val file = DocumentFile.fromSingleUri(this, uri)
@@ -191,9 +189,7 @@ class EditorActivity : AppCompatActivity() {
                 increaseValue = editorViewModel.increaseValue.value?.toIntOrNull() ?: 1,
                 decreaseValue = editorViewModel.decreaseValue.value?.toIntOrNull() ?: 1,
                 autoInSecond = editorViewModel.autoLength.value?.toIntOrNull() ?: 3,
-                autoMediaUri = editorViewModel.mediaUri.value,
-                targetValue = editorViewModel.targetValue.value?.toInt(),
-                targetSeconds = editorViewModel.perCircleSeconds.value?.toLong()
+                autoMediaUri = editorViewModel.mediaUri.value
             )
             listCounterViewModel.addCounter(newCounter)
         } else {
@@ -209,8 +205,6 @@ class EditorActivity : AppCompatActivity() {
                         decreaseValue = editorViewModel.decreaseValue.value?.toIntOrNull() ?: 1
                         autoInSecond = editorViewModel.autoLength.value?.toIntOrNull() ?: 3
                         autoMediaUri = editorViewModel.mediaUri.value
-                        targetValue = editorViewModel.targetValue.value?.toInt()
-                        targetSeconds = editorViewModel.perCircleSeconds.value?.toLong()
                     }
                     listCounterViewModel.updateCounter(counter)
                 }
