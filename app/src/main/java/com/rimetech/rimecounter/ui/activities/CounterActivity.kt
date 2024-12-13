@@ -34,7 +34,6 @@ import com.rimetech.rimecounter.utils.setPaintBackground
 import com.rimetech.rimecounter.viewmodels.CounterViewModel
 import com.rimetech.rimecounter.viewmodels.CounterViewModelFactory
 import com.rimetech.rimecounter.viewmodels.SettingsViewModel
-import kotlinx.coroutines.Job
 import java.util.Date
 import java.util.UUID
 
@@ -50,7 +49,7 @@ class CounterActivity : AppCompatActivity() {
     }
     private lateinit var settingsViewModel: SettingsViewModel
     private var runnable: Runnable? = null
-    private var targetJob: Job? = null
+    private var runnable2: Runnable? = null
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +67,6 @@ class CounterActivity : AppCompatActivity() {
         counterBinding.lifecycleOwner = this
         counterViewModel.counterLiveData.observe(this) { counter ->
             counterBinding.counter = counter
-            counterViewModel.setIsTargetStarted(counter.isTargetStarted)
             setUI(counter)
             updateTimeDifference(counter.startTime)
             updateRunningTime()
@@ -77,7 +75,20 @@ class CounterActivity : AppCompatActivity() {
             setMediaButton(counter)
             setTargetView(counter)
             setTargetButton(counter)
-            setTargetActon(counter)
+            counter.targetValue?.let { target->
+                if (counter.isTargetStarted){
+                    updateLeftTargetSeconds(counter)
+                    runnable2?.let {
+                        handler.post(it)
+                    }
+                } else {
+                    runnable2?.let {
+                        handler.removeCallbacks(it)
+                        runnable2=null
+                    }
+                }
+            }
+
         }
         setMargin()
 
@@ -375,44 +386,8 @@ class CounterActivity : AppCompatActivity() {
                     counter.targetStartDate = Date()
                     counter.currentValue = 0
                     counterViewModel.updateCounter(counter)
-                    counterViewModel.setTargetSeconds(counter.targetSeconds!!)
-                    counterViewModel.startTarget(counter){
-                        counterViewModel.setIsTargetStarted(false)
-                        counter.isTargetStarted=false
-                        counterViewModel.updateCounter(counter)
-                        Toast.makeText(this@CounterActivity,"End",Toast.LENGTH_SHORT).show()
-                    }
-                    recreate()
                 }
-
                 true
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setTargetActon(counter: Counter) {
-        counterViewModel.isTargetStarted.observe(this) { isStart ->
-            if (!isStart) {
-                counterBinding.targetValue.visibility = View.GONE
-                counterBinding.targetSeconds.visibility = View.GONE
-            } else {
-                counterBinding.targetValue.visibility = View.VISIBLE
-                counterBinding.targetSeconds.visibility = View.VISIBLE
-                counterViewModel.leftSeconds.observe(this) { seconds ->
-                    if (counter.currentValue == counter.targetValue || seconds < 0) {
-                        counterViewModel.setIsTargetStarted(false)
-                        counter.currentValue = 0
-                        counter.isTargetStarted = false
-                        counter.targetStartDate = null
-                        targetJob?.cancel()
-                        targetJob = null
-                        counterViewModel.updateCounter(counter)
-                    } else {
-                        counterBinding.targetSeconds.text = "$seconds remain"
-                    }
-                }
-
             }
         }
     }
@@ -427,10 +402,41 @@ class CounterActivity : AppCompatActivity() {
                         ?: throw IllegalArgumentException("Counter color not found!")
                 )
             )
+
+            counterBinding.targetValue.visibility = View.VISIBLE
+            counterBinding.targetSeconds.visibility = View.VISIBLE
         } else {
             counterBinding.targetIcon.clearColorFilter()
+            counterBinding.targetValue.visibility = View.GONE
+            counterBinding.targetSeconds.visibility = View.GONE
         }
+    }
 
+    private fun updateLeftTargetSeconds(counter: Counter) {
+        runnable2?.let { handler.removeCallbacks(it) }
+
+        runnable2 = object : Runnable {
+            override fun run() {
+                counter.targetStartDate?.let { startDate->
+                    counter.targetSeconds?.let { targetSeconds->
+                        val timeToUse = startDate.time+targetSeconds*1000
+                        if (Date().time>timeToUse || counter.currentValue>counter.targetValue!!){
+                            if (counter.isTargetStarted) {
+                                counter.isTargetStarted=false
+                                counter.currentValue=0
+                                counterViewModel.updateCounter(counter)
+                            }
+                        }  else {
+                            val formattedDuration = formatDuration((timeToUse-Date().time)/1000)
+                            counterBinding.targetSeconds.text = formattedDuration
+                        }
+                    }
+                }
+
+                handler.postDelayed(this, 1000)
+            }
+        }
+        handler.post(runnable2!!)
     }
 
 }
